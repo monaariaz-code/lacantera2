@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Cantera - Trends & Influencer Intelligence</title>
+  <title>La Cantera - Trends & Influencer Intelligence Suite</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome -->
@@ -11,2049 +12,681 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif'],
+          },
           colors: {
-            brand: {
+            cantera: {
               50: '#fff7ed',
               100: '#ffedd5',
               400: '#fb923c',
               500: '#f97316',
               600: '#ea580c',
-              700: '#c2410c',
               900: '#7c2d12',
             },
-            darkbg: '#0c0f17',
-            darkcard: '#161b26',
-            darkborder: '#232b3e',
-          },
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-            display: ['Outfit', 'sans-serif'],
+            miro: {
+              400: '#22d3ee',
+              500: '#06b6d4',
+              900: '#083344',
+            }
           }
         }
       }
     }
   </script>
-  
+
   <style>
-    .glass-panel {
-      background: rgba(22, 27, 38, 0.90);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    body {
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .gradient-border {
+      position: relative;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.4), rgba(6, 182, 212, 0.2), rgba(15, 23, 42, 0.8));
+      padding: 1px;
     }
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #0f131d;
+      background: rgba(15, 23, 42, 0.6);
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #2a3347;
+      background: #334155;
       border-radius: 9999px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #ea580c;
-    }
-    .tab-active {
-      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-      color: #ffffff !important;
-      box-shadow: 0 4px 15px -3px rgba(234, 88, 12, 0.4);
+      background: #f97316;
     }
   </style>
 </head>
-<body class="bg-darkbg text-slate-200 font-sans antialiased min-h-screen selection:bg-brand-500 selection:text-white">
+<body class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 antialiased selection:bg-orange-500 selection:text-white">
 
-  <!-- LOGIN OVERLAY -->
-  <div id="authOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md px-4">
-    <div class="glass-panel w-full max-w-md p-8 rounded-3xl shadow-2xl border border-orange-500/20 text-center relative overflow-hidden">
-      <div class="absolute -top-24 -left-24 w-48 h-48 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-orange-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-amber-500 text-white shadow-lg shadow-orange-500/30 mb-5">
-        <i class="fa-solid fa-gem text-2xl"></i>
+  <!-- ================= MODAL DE SEGURIDAD (PASSWORD GATEWAY) ================= -->
+  <div id="passwordGatewayModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md px-4">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl relative text-center">
+      <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center shadow-lg shadow-orange-500/30">
+        <i class="fa-solid fa-lock text-slate-950 text-2xl"></i>
       </div>
+      <h2 class="text-2xl font-bold font-display text-white mb-2">Portal Privado La Cantera</h2>
+      <p class="text-slate-400 text-sm mb-6">Plataforma exclusiva de inteligencia de tendencias y simulación de audiencias para talentos y equipo directivo.</p>
       
-      <h2 class="text-2xl font-bold font-display tracking-tight text-white mb-1">LA CANTERA</h2>
-      <p class="text-xs uppercase tracking-widest text-brand-400 font-semibold mb-6">Influencer Intelligence Suite</p>
-      
-      <p class="text-sm text-slate-400 mb-6">Acceso exclusivo y confidencial para dirección y talentos de la agencia.</p>
-      
-      <form id="loginForm" onsubmit="handleAuth(event)" class="space-y-4">
-        <div class="relative">
-          <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></i>
-          <input 
-            type="password" 
-            id="passcodeInput" 
-            placeholder="Introduce tu clave de acceso..." 
-            class="w-full bg-slate-900/90 text-white pl-11 pr-4 py-3.5 rounded-xl border border-slate-700/80 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 outline-none transition text-sm"
-            required
-            autocomplete="off"
-          />
+      <div class="space-y-4">
+        <div>
+          <input type="password" id="accessPasscodeInput" placeholder="Ingresa tu clave de acceso..." 
+            onkeydown="if(event.key==='Enter') verifyAccessPasscode()"
+            class="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-center text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition tracking-widest text-lg">
         </div>
-        <p id="authError" class="text-xs text-rose-400 hidden flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-triangle-exclamation"></i> Clave incorrecta. Solicita acceso a dirección.
-        </p>
-        
-        <button 
-          type="submit" 
-          class="w-full py-3.5 px-4 bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white font-medium rounded-xl shadow-lg shadow-brand-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2">
-          <span>Ingresar a la Plataforma</span>
-          <i class="fa-solid fa-arrow-right text-xs"></i>
+        <p id="passwordErrorMsg" class="text-xs text-rose-400 hidden font-medium">Clave incorrecta. Intenta con la clave demo.</p>
+        <button onclick="verifyAccessPasscode()" 
+          class="w-full py-3.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-slate-950 font-bold rounded-xl shadow-lg shadow-orange-500/25 transition duration-200">
+          Entrar a la Suite
         </button>
+      </div>
 
-        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
-          <span>Acceso demo rápido:</span>
-          <button type="button" onclick="document.getElementById('passcodeInput').value='cantera2025'" class="px-2 py-0.5 rounded bg-slate-800 text-brand-400 font-mono text-xs hover:bg-slate-700 transition">cantera2025</button>
-        </div>
-      </form>
+      <div class="mt-6 pt-5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+        <span>Acceso Demo: <code class="text-orange-400 bg-orange-950/40 px-2 py-0.5 rounded">cantera2025</code> o <code class="text-orange-400 bg-orange-950/40 px-2 py-0.5 rounded">1234</code></span>
+        <span><i class="fa-solid fa-shield-halved text-emerald-400 mr-1"></i> Seguro</span>
+      </div>
     </div>
   </div>
 
-  <!-- MAIN APP CONTAINER -->
-  <div id="mainApp" class="min-h-screen flex flex-col hidden">
-    <!-- TOP NAVIGATION -->
-    <header class="sticky top-0 z-40 bg-darkbg/95 backdrop-blur-md border-b border-darkborder/70">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+  <!-- ================= NAVEGACIÓN SUPERIOR ================= -->
+  <header class="sticky top-0 z-40 bg-[#090d16]/90 backdrop-blur-xl border-b border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
         
-        <!-- Logo -->
-        <div class="flex items-center gap-3.5">
-          <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500 to-amber-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
-            <i class="fa-solid fa-fire text-lg"></i>
+        <!-- Brand Logo -->
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="switchMainTab('radar')">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-400 flex items-center justify-center font-black text-slate-950 font-display text-xl shadow-lg shadow-orange-500/20">
+            <i class="fa-solid fa-fire"></i>
           </div>
           <div>
-            <div class="flex items-center gap-2">
-              <span class="text-xl font-bold tracking-tight font-display text-white">LA CANTERA</span>
-              <span class="px-2 py-0.5 text-[10px] font-semibold bg-brand-500/10 text-brand-400 border border-brand-500/30 rounded-full">AGENCY LAB</span>
+            <div class="flex items-center space-x-2">
+              <span class="font-display font-extrabold text-xl text-white tracking-tight">LA CANTERA</span>
+              <span class="text-[10px] bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">Agency Lab</span>
             </div>
-            <p class="text-xs text-slate-400">Tendencias & Estrategia Digital</p>
+            <p class="text-xs text-slate-400 hidden sm:block">Tendencias & Estrategia Digital</p>
           </div>
         </div>
 
-        <!-- Quick Search -->
-        <div class="hidden md:flex items-center flex-1 max-w-md mx-6">
+        <!-- Buscador Inteligente Global -->
+        <div class="hidden md:flex flex-1 max-w-md mx-6">
           <div class="relative w-full">
-            <i class="fa-solid fa-bolt text-brand-400 absolute left-3.5 top-1/2 -translate-y-1/2 text-xs"></i>
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
             <input 
               type="text" 
-              id="globalQuickSearch" 
-              onkeydown="if(event.key==='Enter') triggerAiResearch(this.value)"
-              placeholder="Buscar tendencia global (ej. Recetas virales, Tenis padel, MasterChef)..." 
-              class="w-full bg-slate-900/80 text-xs text-white pl-9 pr-24 py-2.5 rounded-xl border border-slate-700/60 focus:border-brand-500 focus:outline-none transition"
+              id="globalAiSearchInput" 
+              placeholder="Buscar tendencia o nicho (ej: food, padel, masterchef)..." 
+              onkeyup="handleLiveSearch(event)"
+              class="w-full bg-slate-900/90 text-sm text-slate-100 pl-10 pr-24 py-2.5 rounded-xl border border-slate-700/80 focus:border-orange-500 focus:outline-none transition shadow-inner"
             />
             <button 
-              onclick="triggerAiResearch(document.getElementById('globalQuickSearch').value)"
-              class="absolute right-1.5 top-1/2 -translate-y-1/2 px-2.5 py-1 text-[11px] font-medium bg-brand-600 hover:bg-brand-500 text-white rounded-lg transition">
+              onclick="triggerAiResearch()" 
+              class="absolute right-1.5 top-1.5 px-3 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold text-xs rounded-lg hover:brightness-110 transition shadow-sm">
               Escanear
             </button>
           </div>
         </div>
 
-        <!-- User profile -->
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 bg-slate-900/60 p-1.5 pr-3 rounded-full border border-slate-800">
-            <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-brand-400 border border-slate-700">
+        <!-- User Badge & Actions -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-2 bg-slate-800/80 border border-slate-700/60 rounded-xl px-3 py-1.5">
+            <div class="w-7 h-7 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-xs font-bold">
               LC
             </div>
-            <span class="text-xs font-medium text-slate-300">Staff Cantera</span>
+            <span class="text-xs font-medium text-slate-300 hidden sm:inline">Staff Cantera</span>
           </div>
-          <button 
-            onclick="logout()" 
-            title="Cerrar sesión" 
-            class="p-2.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800/80 rounded-xl transition">
-            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
+          <button onclick="lockAppAgain()" title="Bloquear sesión" class="text-slate-400 hover:text-rose-400 p-2 text-sm transition">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
           </button>
         </div>
+
       </div>
 
-      <!-- NAVIGATION TABS -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex overflow-x-auto gap-2 py-2 border-t border-slate-800/60 text-xs font-medium custom-scrollbar">
-        <button onclick="switchTab('feed')" id="tab-feed" class="tab-btn tab-active px-4 py-2 rounded-xl flex items-center gap-2 whitespace-nowrap transition">
-          <i class="fa-solid fa-compass"></i>
-          <span>Radar de Tendencias Diarias</span>
+      <!-- Barra de navegación secundaria (Pestañas) -->
+      <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto custom-scrollbar pb-3 pt-1 text-sm font-medium">
+        <button onclick="switchMainTab('radar')" id="tabBtn-radar" class="tab-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition whitespace-nowrap active-tab bg-orange-500/10 text-orange-400 border border-orange-500/30">
+          <i class="fa-solid fa-bolt mr-2"></i>Radar de Tendencias Diarias
         </button>
-        <button onclick="switchTab('videos')" id="tab-videos" class="tab-btn px-4 py-2 rounded-xl bg-slate-900/40 text-slate-400 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
-          <i class="fa-brands fa-tiktok text-pink-500"></i>
-          <span>Videos & Enlaces Virales (TikTok / IG / YT)</span>
+        <button onclick="switchMainTab('videos')" id="tabBtn-videos" class="tab-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition whitespace-nowrap">
+          <i class="fa-brands fa-tiktok mr-2"></i>Videos & Enlaces Virales (TikTok / IG / YT)
         </button>
-        <button onclick="switchTab('roster')" id="tab-roster" class="tab-btn px-4 py-2 rounded-xl bg-slate-900/40 text-slate-400 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
-          <i class="fa-solid fa-users"></i>
-          <span>Talentos & Influencers Clave</span>
+        <button onclick="switchMainTab('talents')" id="tabBtn-talents" class="tab-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition whitespace-nowrap">
+          <i class="fa-solid fa-users-viewfinder mr-2"></i>Talentos & Influencers Clave
         </button>
-        <button onclick="switchTab('campaigns')" id="tab-campaigns" class="tab-btn px-4 py-2 rounded-xl bg-slate-900/40 text-slate-400 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
-          <i class="fa-solid fa-trophy"></i>
-          <span>Campañas & Publicidad Global</span>
+        <button onclick="switchMainTab('campaigns')" id="tabBtn-campaigns" class="tab-btn px-4 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition whitespace-nowrap">
+          <i class="fa-solid fa-trophy mr-2"></i>Campañas & Publicidad Global
         </button>
-        <button onclick="switchTab('mirofish')" id="tab-mirofish" class="tab-btn px-4 py-2 rounded-xl bg-slate-900/40 text-cyan-400 hover:text-cyan-300 flex items-center gap-2 whitespace-nowrap transition">
-          <i class="fa-solid fa-network-wired text-cyan-400"></i>
-          <span>MiroFish Swarm Simulator (Predicción IA)</span>
-          <span class="px-1.5 py-0.2 text-[9px] bg-cyan-500/20 text-cyan-300 rounded border border-cyan-500/30">NUEVO</span>
+        <button onclick="switchMainTab('mirofish')" id="tabBtn-mirofish" class="tab-btn px-4 py-2 rounded-xl text-cyan-300 hover:text-cyan-200 hover:bg-cyan-950/40 transition whitespace-nowrap border border-cyan-500/20">
+          <i class="fa-solid fa-network-wired mr-2 text-cyan-400"></i>MiroFish Swarm Simulator (Predicción IA)
         </button>
-        <button onclick="switchTab('generator')" id="tab-generator" class="tab-btn px-4 py-2 rounded-xl bg-slate-900/40 text-slate-400 hover:text-white flex items-center gap-2 whitespace-nowrap transition">
-          <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-          <span>Generador de Ideas de Contenido (IA)</span>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= CUERPO PRINCIPAL ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Buscador móvil si la pantalla es reducida -->
+    <div class="block md:hidden">
+      <div class="relative w-full">
+        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-500 text-sm"></i>
+        <input 
+          type="text" 
+          id="globalAiSearchInputMobile" 
+          placeholder="Buscar tendencia (ej: food, padel, cocina)..." 
+          onkeyup="if(event.key==='Enter'){ document.getElementById('globalAiSearchInput').value=this.value; triggerAiResearch(); }"
+          class="w-full bg-slate-900 text-sm text-slate-100 pl-10 pr-24 py-2.5 rounded-xl border border-slate-700 focus:border-orange-500 focus:outline-none"
+        />
+        <button 
+          onclick="document.getElementById('globalAiSearchInput').value=document.getElementById('globalAiSearchInputMobile').value; triggerAiResearch();" 
+          class="absolute right-1.5 top-1.5 px-3 py-1.5 bg-orange-500 text-slate-950 font-bold text-xs rounded-lg">
+          Escanear
         </button>
-      </div>
-    </header>
-
-    <!-- CONTENT VIEW CONTAINER -->
-    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
-
-      <!-- ================= VIEW 1: RADAR DE TENDENCIAS (FEED) ================= -->
-      <section id="view-feed" class="space-y-6">
-        
-        <!-- Live AI Scanner Banner -->
-        <div class="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-orange-950/40 via-darkcard to-slate-900/80 border border-orange-500/20 shadow-xl">
-          <div class="relative z-10 max-w-2xl">
-            <div class="flex items-center gap-2 text-xs font-semibold text-brand-400 mb-2">
-              <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-              RADAR DE VIRALIDAD MUNDIAL ACTIVO
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-white font-display mb-2">
-              Inspiración diaria para las estrellas de La Cantera
-            </h1>
-            <p class="text-slate-400 text-sm mb-5 leading-relaxed">
-              Monitoreo en vivo de formatos en auge en TikTok, Reels y YouTube Shorts con enlaces directos para Juan Diego, Julieta, Robert y nuevos talentos.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <button onclick="fetchFreshAiTrends('Gastronomía y Foodies en TikTok e Instagram')" class="px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-brand-600 text-white text-xs border border-slate-700 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-utensils text-orange-400"></i> Tendencias Foodie
-              </button>
-              <button onclick="fetchFreshAiTrends('Tenis y Padel Fitness en TikTok')" class="px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-brand-600 text-white text-xs border border-slate-700 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-baseball-bat-ball text-emerald-400"></i> Sports & Padel
-              </button>
-              <button onclick="fetchFreshAiTrends('Lifestyle y TV en Instagram Reels')" class="px-3.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-brand-600 text-white text-xs border border-slate-700 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-tv text-purple-400"></i> Lifestyle & TV
-              </button>
-              <button onclick="fetchFreshAiTrends('Tendencias virales de hoy')" class="px-3.5 py-1.5 rounded-lg bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold shadow-md shadow-brand-500/30 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-arrows-rotate"></i> Actualizar Todo Hoy
-              </button>
-            </div>
-          </div>
-          <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-brand-500/10 to-transparent pointer-events-none hidden md:block"></div>
-        </div>
-
-        <!-- Filter category chips -->
-        <div class="flex items-center justify-between flex-wrap gap-4 pt-2">
-          <div class="flex items-center gap-2 overflow-x-auto pb-1 max-w-full custom-scrollbar">
-            <span class="text-xs text-slate-500 font-medium mr-1">Filtrar por:</span>
-            <button onclick="filterTrends('all', this)" class="chip-filter active px-3 py-1 text-xs rounded-full bg-brand-500 text-white font-medium">Todos</button>
-            <button onclick="filterTrends('Gastronomía', this)" class="chip-filter px-3 py-1 text-xs rounded-full bg-slate-800/70 text-slate-400 hover:text-white">Gastronomía</button>
-            <button onclick="filterTrends('Deporte', this)" class="chip-filter px-3 py-1 text-xs rounded-full bg-slate-800/70 text-slate-400 hover:text-white">Deportes & Padel</button>
-            <button onclick="filterTrends('Lifestyle', this)" class="chip-filter px-3 py-1 text-xs rounded-full bg-slate-800/70 text-slate-400 hover:text-white">Lifestyle & Moda</button>
-            <button onclick="filterTrends('Campañas', this)" class="chip-filter px-3 py-1 text-xs rounded-full bg-slate-800/70 text-slate-400 hover:text-white">Publicidad Viral</button>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="openAddVideoModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs border border-slate-700 transition flex items-center gap-1.5">
-              <i class="fa-solid fa-plus text-brand-400"></i> Agregar Video Link
-            </button>
-            <span id="trendsCounter" class="text-xs text-slate-500">6 tendencias destacadas</span>
-          </div>
-        </div>
-
-        <!-- Loading indicator -->
-        <div id="trendsLoading" class="hidden py-12 text-center">
-          <div class="inline-block animate-spin text-brand-500 text-3xl mb-3">
-            <i class="fa-solid fa-circle-notch"></i>
-          </div>
-          <p class="text-sm text-slate-300 font-medium">Buscando tendencias mundiales actualizadas con IA...</p>
-          <p class="text-xs text-slate-500">Analizando redes sociales, campañas publicitarias y formatos de video.</p>
-        </div>
-
-        <!-- Trends Grid -->
-        <div id="trendsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-        <!-- Daily Insight Section -->
-        <div class="glass-panel rounded-2xl p-6 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div class="flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl shrink-0">
-              <i class="fa-solid fa-lightbulb"></i>
-            </div>
-            <div>
-              <h4 class="text-base font-semibold text-white">Insight de Algoritmo (Instagram & TikTok)</h4>
-              <p class="text-xs text-slate-400 mt-0.5">Los videos con corte inicial en los primeros 1.8 segundos y texto en pantalla aumentan más del 40% la retención.</p>
-            </div>
-          </div>
-          <button onclick="pitchThisCampaign('Corte rápido en 2 segundos', 'Juan Diego Vanegas')" class="whitespace-nowrap px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition">
-            Generar Guion Rápido
-          </button>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 2: VIDEOS VIRALES ================= -->
-      <section id="view-videos" class="hidden space-y-6">
-        <div class="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 class="text-2xl font-bold font-display text-white">Videos & Tendencias en TikTok, Reels y Shorts</h2>
-              <span class="px-2.5 py-0.5 text-[10px] bg-gradient-to-r from-pink-500/20 to-purple-500/20 text-pink-400 border border-pink-500/30 rounded-full font-bold">ENLACES DIRECTOS Y ACTIVOS</span>
-            </div>
-            <p class="text-xs text-slate-400">Accede directamente a los videos y audios virales de TikTok, Instagram y Shorts para Juan Diego Vanegas, Julieta Piñeres y Robert Farah.</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="openAddVideoModal()" class="px-3.5 py-2 bg-brand-500 hover:bg-brand-600 text-xs font-semibold text-white rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5">
-              <i class="fa-solid fa-link"></i> Pegar Enlace TikTok / IG
-            </button>
-            <button onclick="fetchFreshAiTrends('videos virales de tiktok e instagram')" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-white rounded-xl border border-slate-700 transition flex items-center gap-1.5">
-              <i class="fa-solid fa-rotate text-brand-400"></i> Buscar Nuevos Videos IA
-            </button>
-          </div>
-        </div>
-
-        <!-- Direct Social Radar Shortcuts -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <a href="https://www.tiktok.com/tag/recetasvirales" target="_blank" rel="noopener noreferrer" class="p-3.5 rounded-2xl bg-gradient-to-r from-pink-950/40 to-slate-900 border border-pink-500/30 hover:border-pink-500 flex items-center justify-between transition group">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-lg">
-                <i class="fa-brands fa-tiktok"></i>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-white group-hover:text-pink-300">#RecetasVirales TikTok</p>
-                <p class="text-[10px] text-slate-400">Inspiración para Juan Diego</p>
-              </div>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-pink-400"></i>
-          </a>
-
-          <a href="https://www.tiktok.com/tag/padel" target="_blank" rel="noopener noreferrer" class="p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/40 to-slate-900 border border-emerald-500/30 hover:border-emerald-500 flex items-center justify-between transition group">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
-                <i class="fa-brands fa-tiktok"></i>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-white group-hover:text-emerald-300">#Padel & #Tennis TikTok</p>
-                <p class="text-[10px] text-slate-400">Inspiración para Robert Farah</p>
-              </div>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-emerald-400"></i>
-          </a>
-
-          <a href="https://www.instagram.com/explore/tags/masterchefcelebrity/" target="_blank" rel="noopener noreferrer" class="p-3.5 rounded-2xl bg-gradient-to-r from-purple-950/40 to-slate-900 border border-purple-500/30 hover:border-purple-500 flex items-center justify-between transition group">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg">
-                <i class="fa-brands fa-instagram"></i>
-              </div>
-              <div>
-                <p class="text-xs font-bold text-white group-hover:text-purple-300">#MasterChef Reels</p>
-                <p class="text-[10px] text-slate-400">Inspiración para Julieta Piñeres</p>
-              </div>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square text-xs text-purple-400"></i>
-          </a>
-        </div>
-
-        <!-- Video Platform Filter Buttons -->
-        <div class="flex items-center justify-between flex-wrap gap-3">
-          <div class="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar">
-            <button onclick="filterVideoPlatform('all', this)" class="vid-platform-chip active px-3.5 py-1.5 text-xs rounded-xl bg-brand-500 text-white font-medium flex items-center gap-1.5 shadow-sm">
-              <i class="fa-solid fa-layer-group"></i> Todos (<span id="count-all-vids">0</span>)
-            </button>
-            <button onclick="filterVideoPlatform('TikTok', this)" class="vid-platform-chip px-3.5 py-1.5 text-xs rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-1.5">
-              <i class="fa-brands fa-tiktok text-pink-500"></i> TikTok (<span id="count-tiktok-vids">0</span>)
-            </button>
-            <button onclick="filterVideoPlatform('Instagram', this)" class="vid-platform-chip px-3.5 py-1.5 text-xs rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-1.5">
-              <i class="fa-brands fa-instagram text-rose-400"></i> Instagram Reels (<span id="count-ig-vids">0</span>)
-            </button>
-            <button onclick="filterVideoPlatform('YouTube', this)" class="vid-platform-chip px-3.5 py-1.5 text-xs rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white flex items-center gap-1.5">
-              <i class="fa-brands fa-youtube text-red-500"></i> YouTube Shorts (<span id="count-yt-vids">0</span>)
-            </button>
-          </div>
-
-          <!-- Talent Quick Filter -->
-          <div class="flex items-center gap-1.5 text-xs text-slate-400">
-            <span>Filtrar por talento:</span>
-            <select id="videoTalentFilter" onchange="filterVideosByTalent(this.value)" class="bg-slate-900 border border-slate-700 text-white text-xs px-2.5 py-1.5 rounded-xl outline-none focus:border-brand-500">
-              <option value="all">Todos los Talentos</option>
-              <option value="Juan Diego">Juan Diego Vanegas</option>
-              <option value="Julieta">Julieta Piñeres</option>
-              <option value="Robert">Robert Farah</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Gallery Grid -->
-        <div id="videoGalleryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start"></div>
-      </section>
-
-      <!-- ================= VIEW 3: ROSTER DE TALENTOS ================= -->
-      <section id="view-roster" class="hidden space-y-6">
-        <div class="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h2 class="text-2xl font-bold font-display text-white">Talentos Clave de La Cantera</h2>
-            <p class="text-xs text-slate-400">Personaliza la búsqueda de tendencias, colaboraciones de marcas y formatos según el perfil del influencer.</p>
-          </div>
-          <button onclick="openNewTalentModal()" class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-semibold rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center gap-2">
-            <i class="fa-solid fa-user-plus"></i>
-            <span>Vincular Nuevo Talento</span>
-          </button>
-        </div>
-
-        <!-- Talents Grid -->
-        <div id="talentsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
-
-        <!-- Talent Detail Drawer Area -->
-        <div id="talentFocusedArea" class="glass-panel p-6 rounded-2xl border border-slate-800">
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-crosshairs text-brand-500"></i>
-              <span>Oportunidades de Campañas para <span id="focusedTalentName" class="text-brand-400">Juan Diego Vanegas</span></span>
-            </h3>
-            <span class="text-xs px-2.5 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700">Actualizado recientemente</span>
-          </div>
-          <div id="focusedTalentRecommendations" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs"></div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 4: CAMPAÑAS Y PUBLICIDAD MUNDIAL ================= -->
-      <section id="view-campaigns" class="hidden space-y-6">
-        <div class="flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <h2 class="text-2xl font-bold font-display text-white">Casos de Éxito & Campañas de Influencers Mundiales</h2>
-            <p class="text-xs text-slate-400">Estrategias de marcas globales (Nike, Red Bull, Spotify, Nespresso, Wilson) adaptables para clientes de la agencia.</p>
-          </div>
-          <button onclick="aiSearchCampaigns()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-white rounded-xl border border-slate-700 transition flex items-center gap-1.5">
-            <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Explorar Campañas con IA
-          </button>
-        </div>
-
-        <div id="campaignsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-      </section>
-
-      <!-- ================= VIEW: MIROFISH SWARM PREDICTOR ================= -->
-      <section id="view-mirofish" class="hidden space-y-6">
-        <!-- MiroFish Header Banner -->
-        <div class="relative overflow-hidden rounded-3xl p-6 sm:p-8 bg-gradient-to-r from-cyan-950/40 via-darkcard to-slate-900 border border-cyan-500/30 shadow-xl">
-          <div class="relative z-10 max-w-3xl">
-            <div class="flex items-center gap-2 text-xs font-semibold text-cyan-400 mb-2">
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-              MOTOR MIROFISH &bull; SIMULACIÓN MULTI-AGENTE Y PREDICCIÓN SOCIAL
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white font-display mb-2">
-              Predice la reacción del público antes de publicar
-            </h2>
-            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
-              Inspirado en la tecnología <strong>MiroFish</strong>: despliega un enjambre (<em>swarm</em>) de agentes de IA con personalidades heterogéneas (fans leales, haters escépticos, marcas patrocinadoras, periodistas y consumidores) que interactúan en un mundo paralelo para predecir viralidad, riesgos de crisis de reputación y retorno de marca.
-            </p>
-            <div class="flex flex-wrap gap-2 text-xs">
-              <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-cyan-500/30 text-cyan-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-microchip"></i> GraphRAG & Entity Memory
-              </span>
-              <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700 text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-users-viewfinder"></i> Dual Platform Simulation (TikTok / X)
-              </span>
-              <span class="px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-700 text-slate-300 flex items-center gap-1.5">
-                <i class="fa-solid fa-shield-halved text-emerald-400"></i> Detección de Riesgo de Cancelación
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Presets & Simulation Builder -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Input Form -->
-          <div class="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4 lg:col-span-1">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-sliders text-cyan-400"></i>
-              <span>Configurar Simulación Swarm</span>
-            </h3>
-
-            <!-- Quick Presets -->
-            <div class="space-y-1.5">
-              <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Escenarios Pre-cargados</label>
-              <div class="grid grid-cols-1 gap-1.5">
-                <button type="button" onclick="loadMiroPreset('juandiego')" class="text-left p-2.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 transition text-xs">
-                  <div class="font-semibold text-white">Juan Diego Vanegas</div>
-                  <div class="text-[10px] text-slate-400 truncate">Campaña Asado con salsa patrocinada vs tradicionalistas</div>
-                </button>
-                <button type="button" onclick="loadMiroPreset('julieta')" class="text-left p-2.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 transition text-xs">
-                  <div class="font-semibold text-white">Julieta Piñeres</div>
-                  <div class="text-[10px] text-slate-400 truncate">Revelación confidencial MasterChef + sponsor skincare</div>
-                </button>
-                <button type="button" onclick="loadMiroPreset('robert')" class="text-left p-2.5 rounded-xl bg-slate-900/70 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 transition text-xs">
-                  <div class="font-semibold text-white">Robert Farah</div>
-                  <div class="text-[10px] text-slate-400 truncate">Desafío Padel Pro vs Novato + marca premium de autos</div>
-                </button>
-              </div>
-            </div>
-
-            <div class="space-y-3 pt-2 border-t border-slate-800">
-              <div>
-                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Talento evaluado</label>
-                <select id="miroTalent" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-cyan-500 focus:outline-none">
-                  <option value="Juan Diego Vanegas (Chef / Foodie)">Juan Diego Vanegas</option>
-                  <option value="Julieta Piñeres (Lifestyle / TV / MasterChef)">Julieta Piñeres</option>
-                  <option value="Robert Farah (Tenista Campeón / Padel / Wellness)">Robert Farah</option>
-                  <option value="Nuevo Creador Cantera">Nuevo Talento</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Hipótesis / Idea de Campaña a Probar</label>
-                <textarea id="miroHypothesis" rows="3" class="w-full bg-slate-900 text-white text-xs p-3 rounded-xl border border-slate-700 focus:border-cyan-500 focus:outline-none" placeholder="Describe el guion, el producto a promocionar o la posible polémica a simular..."></textarea>
-              </div>
-
-              <div class="grid grid-cols-2 gap-2 text-xs">
-                <div>
-                  <label class="block text-[10px] text-slate-400 uppercase mb-1">Agentes Swarm</label>
-                  <select id="miroAgentCount" class="w-full bg-slate-900 text-white text-xs p-2 rounded-xl border border-slate-700">
-                    <option value="50">50 Agentes IA (Rápido)</option>
-                    <option value="150" selected>150 Agentes IA (Óptimo)</option>
-                    <option value="500">500 Agentes IA (Profundo)</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-[10px] text-slate-400 uppercase mb-1">Rondas de Debate</label>
-                  <select id="miroRounds" class="w-full bg-slate-900 text-white text-xs p-2 rounded-xl border border-slate-700">
-                    <option value="3">3 Rondas (Inmediata)</option>
-                    <option value="6" selected>6 Rondas (Contagio)</option>
-                  </select>
-                </div>
-              </div>
-
-              <button 
-                id="miroRunBtn"
-                onclick="runMiroFishSimulation()" 
-                class="w-full py-3.5 px-4 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2 text-xs">
-                <i class="fa-solid fa-play"></i>
-                <span>Desplegar Enjambre & Predecir</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Simulation Live Visualizer & Agent Chat Stream -->
-          <div class="glass-panel p-6 rounded-3xl border border-slate-800 lg:col-span-2 flex flex-col justify-between space-y-4">
-            <div>
-              <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-                <div class="flex items-center gap-2">
-                  <div class="w-2.5 h-2.5 rounded-full bg-cyan-400" id="swarmStatusDot"></div>
-                  <h3 class="text-sm font-bold text-white">Actividad del Enjambre de Agentes en Tiempo Real</h3>
-                </div>
-                <span id="swarmStatusText" class="text-[10px] uppercase font-mono text-slate-400">Listo para simular</span>
-              </div>
-
-              <!-- Agent Persona Cluster Chips -->
-              <div class="flex items-center gap-2 flex-wrap py-3 text-[10px]">
-                <span class="text-slate-500 font-semibold mr-1">Arquetipos simulados:</span>
-                <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center gap-1">
-                  <i class="fa-solid fa-heart"></i> Fans Leales
-                </span>
-                <span class="px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 flex items-center gap-1">
-                  <i class="fa-solid fa-ban"></i> Críticos & Haters
-                </span>
-                <span class="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center gap-1">
-                  <i class="fa-solid fa-briefcase"></i> Patrocinadores
-                </span>
-                <span class="px-2 py-0.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1">
-                  <i class="fa-solid fa-newspaper"></i> Medios & Chismes
-                </span>
-                <span class="px-2 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center gap-1">
-                  <i class="fa-solid fa-cart-shopping"></i> Comprador Impulsivo
-                </span>
-              </div>
-
-              <!-- Stream Messages -->
-              <div id="miroStreamBox" class="bg-slate-950/70 rounded-2xl p-4 border border-slate-800/80 h-64 overflow-y-auto space-y-2.5 custom-scrollbar font-sans text-xs">
-                <div class="text-center text-slate-500 py-16">
-                  <i class="fa-solid fa-fish-fins text-3xl mb-2 text-slate-600 block"></i>
-                  El entorno de simulación paralela está inactivo.<br>
-                  Selecciona una hipótesis o un preset a la izquierda y pulsa <strong>"Desplegar Enjambre & Predecir"</strong>.
-                </div>
-              </div>
-            </div>
-
-            <!-- Quantitative Gauge Bar -->
-            <div id="miroMetricsBar" class="hidden grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 border-t border-slate-800 text-center">
-              <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                <div class="text-[10px] uppercase text-slate-400 font-semibold">Índice de Viralidad</div>
-                <div id="gaugeViral" class="text-base font-extrabold text-cyan-400">--</div>
-              </div>
-              <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                <div class="text-[10px] uppercase text-slate-400 font-semibold">Sentimiento Favorable</div>
-                <div id="gaugePositive" class="text-base font-extrabold text-emerald-400">--</div>
-              </div>
-              <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                <div class="text-[10px] uppercase text-slate-400 font-semibold">Riesgo de Rechazo/PR</div>
-                <div id="gaugeRisk" class="text-base font-extrabold text-rose-400">--</div>
-              </div>
-              <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
-                <div class="text-[10px] uppercase text-slate-400 font-semibold">Conversión a Compra</div>
-                <div id="gaugeConversion" class="text-base font-extrabold text-amber-400">--</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Emergent Prediction Report (MiroFish Synthesized Outcome) -->
-        <div id="miroReportWrapper" class="hidden glass-panel p-6 sm:p-8 rounded-3xl border border-cyan-500/30 space-y-5 shadow-2xl">
-          <div class="flex items-center justify-between flex-wrap gap-2 pb-4 border-b border-slate-800">
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg border border-cyan-500/30">
-                <i class="fa-solid fa-file-waveform"></i>
-              </div>
-              <div>
-                <h3 class="text-lg font-bold text-white font-display">Informe de Predicción Social MiroFish</h3>
-                <p class="text-xs text-slate-400">Síntesis estructurada obtenida del comportamiento emergente del enjambre</p>
-              </div>
-            </div>
-            <button onclick="copyMiroReport()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs border border-slate-700 flex items-center gap-1.5 transition">
-              <i class="fa-regular fa-copy"></i> Copiar Reporte
-            </button>
-          </div>
-
-          <div id="miroReportOutput" class="space-y-4 text-xs text-slate-300 leading-relaxed font-sans"></div>
-        </div>
-      </section>
-
-      <!-- ================= VIEW 5: GENERADOR DE IDEAS DE CONTENIDO (AI) ================= -->
-      <section id="view-generator" class="hidden space-y-6">
-        <div class="max-w-3xl mx-auto">
-          <div class="text-center mb-8">
-            <div class="inline-flex p-3 rounded-2xl bg-brand-500/10 text-brand-400 mb-3 border border-brand-500/20">
-              <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
-            </div>
-            <h2 class="text-3xl font-extrabold font-display text-white">Laboratorio Creativo La Cantera</h2>
-            <p class="text-sm text-slate-400 max-w-xl mx-auto mt-1">
-              Genera conceptos virales, ganchos de video y propuestas de marcas personalizadas usando la IA integrada.
-            </p>
-          </div>
-
-          <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 space-y-6 shadow-2xl">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Talento / Influencer</label>
-                <select id="genTalentSelect" class="w-full bg-slate-900 text-white text-sm px-4 py-3 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none">
-                  <option value="Juan Diego Vanegas (Chef, Parrillero, MasterChef, Carismático)">Juan Diego Vanegas (Chef / Foodie)</option>
-                  <option value="Julieta Piñeres (Presentadora, Moda, Estilo de Vida, MasterChef)">Julieta Piñeres (Lifestyle / TV)</option>
-                  <option value="Robert Farah (Ex Tenista No.1 Wimbledon/US Open, Padel, Wellness)">Robert Farah (Deporte / Wellness)</option>
-                  <option value="Nuevo Talento Emergente de La Cantera">Otro Talento de la Agencia</option>
-                </select>
-              </div>
-
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Objetivo o Tipo de Contenido</label>
-                <select id="genTypeSelect" class="w-full bg-slate-900 text-white text-sm px-4 py-3 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none">
-                  <option value="Video Viral Orgánico para TikTok/Reels con Hook Poderoso">Video Viral Orgánico (TikTok/Reels)</option>
-                  <option value="Propuesta de Campaña Comercial y Branded Content para Marcas">Propuesta Comercial para Marca / Sponsor</option>
-                  <option value="Colaboración o Crossover entre Talentos de La Cantera">Crossover entre Talentos de la Agencia</option>
-                  <option value="Serie de Episodios Cortos (Micro-documental)">Serie de Contenido por Capítulos</option>
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Marca patrocinadora o Tema específico (Opcional)</label>
-              <input 
-                type="text" 
-                id="genBrandTopic" 
-                placeholder="Ejemplo: Marca de sartenes de lujo, bebida hidratante, restaurante o reto gastronómico..." 
-                class="w-full bg-slate-900 text-white text-sm px-4 py-3 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none"
-              />
-            </div>
-
-            <button 
-              id="generateBtn"
-              onclick="generateCreativeBrief()"
-              class="w-full py-4 bg-gradient-to-r from-brand-500 via-brand-600 to-amber-600 hover:from-brand-600 hover:to-brand-700 text-white font-bold rounded-2xl shadow-xl shadow-brand-500/25 transition active:scale-[0.99] flex items-center justify-center gap-2">
-              <i class="fa-solid fa-sparkles"></i>
-              <span>Crear Propuesta & Ganchos Virales</span>
-            </button>
-
-            <!-- Output Container -->
-            <div id="genResultWrapper" class="hidden pt-6 border-t border-slate-800 space-y-4">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-brand-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <i class="fa-solid fa-circle-check"></i> Propuesta Creativa Generada
-                </span>
-                <button onclick="copyGeneratedIdea()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                  <i class="fa-regular fa-copy"></i> Copiar Guion
-                </button>
-              </div>
-
-              <div id="genResultOutput" class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 text-slate-200 text-sm leading-relaxed whitespace-pre-wrap font-mono custom-scrollbar max-h-96 overflow-y-auto"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- MODAL: DETALLES DE TENDENCIA O CAMPAÑA -->
-    <div id="trendDetailModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
-      <div class="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl border border-slate-700 p-6 sm:p-8 space-y-4 custom-scrollbar">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div class="flex items-center gap-2">
-            <span id="modalCategoryTag" class="px-2.5 py-1 text-xs rounded-full bg-brand-500/20 text-brand-400 font-semibold">Tendencia</span>
-            <span id="modalDateTag" class="text-xs text-slate-400">Hoy</span>
-          </div>
-          <button onclick="closeTrendModal()" class="text-slate-400 hover:text-white p-2 rounded-lg">
-            <i class="fa-solid fa-xmark text-lg"></i>
-          </button>
-        </div>
-
-        <h3 id="modalTitle" class="text-xl sm:text-2xl font-bold text-white font-display">Título</h3>
-        <p id="modalDescription" class="text-sm text-slate-300 leading-relaxed">Descripción</p>
-
-        <!-- Video Section Inside Modal -->
-        <div id="modalVideoSection" class="hidden space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-xs uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1.5">
-              <i class="fa-solid fa-video text-brand-400"></i> Video de Referencia
-            </span>
-            <a id="modalExternalLink" href="#" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-400 hover:text-brand-300 flex items-center gap-1 bg-slate-800 px-2.5 py-1 rounded-lg border border-slate-700">
-              <span>Abrir en plataforma oficial</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </a>
-          </div>
-          <div id="modalVideoContainer" class="rounded-2xl overflow-hidden bg-black/60 border border-slate-800 aspect-video flex items-center justify-center"></div>
-        </div>
-
-        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
-          <h4 class="text-xs uppercase font-bold text-amber-400 tracking-wider">¿Cómo puede aprovecharlo La Cantera?</h4>
-          <p id="modalAgencyTake" class="text-xs text-slate-300 leading-relaxed"></p>
-        </div>
-
-        <div class="pt-3 border-t border-slate-800 flex items-center justify-end gap-3">
-          <button onclick="closeTrendModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition">Cerrar</button>
-          <button id="modalActionBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-500 hover:bg-brand-600 text-white shadow-lg transition">Generar Guion</button>
-        </div>
       </div>
     </div>
 
-    <!-- MODAL: AGREGAR VIDEO / ENLACE MANUAL -->
-    <div id="addVideoModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
-      <div class="glass-panel w-full max-w-lg rounded-3xl border border-slate-700 p-6 sm:p-7 space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-          <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-brand-500/20 text-brand-400 flex items-center justify-center text-sm">
-              <i class="fa-solid fa-link"></i>
-            </div>
-            <h3 class="text-base font-bold text-white">Vincular Video Viral</h3>
+    <!-- ================= SECCIÓN 1: RADAR DE TENDENCIAS DIARIAS ================= -->
+    <section id="section-radar" class="tab-content space-y-6">
+      
+      <!-- Banner superior de inspiración diaria -->
+      <div class="rounded-3xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-orange-950/30 border border-slate-800 p-6 sm:p-8 relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center space-x-2 bg-orange-500/10 text-orange-400 border border-orange-500/20 px-3 py-1 rounded-full text-xs font-bold mb-3">
+            <span class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+            <span>Radar de Viralidad Mundial Activo</span>
           </div>
-          <button onclick="closeAddVideoModal()" class="text-slate-400 hover:text-white p-1">
-            <i class="fa-solid fa-xmark text-lg"></i>
-          </button>
+          <h1 class="text-3xl sm:text-4xl font-display font-extrabold text-white tracking-tight leading-tight mb-3">
+            Inspiración diaria para las estrellas de La Cantera
+          </h1>
+          <p class="text-slate-400 text-sm sm:text-base leading-relaxed mb-6">
+            Monitoreo en vivo de formatos en auge en TikTok, Reels y YouTube Shorts con enlaces directos para Juan Diego, Julieta, Robert y nuevos talentos.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <button onclick="quickFilterKeyword('cocina')" class="px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition">
+              <i class="fa-solid fa-utensils text-orange-400 mr-1.5"></i>Tendencias Foodie
+            </button>
+            <button onclick="quickFilterKeyword('padel')" class="px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition">
+              <i class="fa-solid fa-baseball text-cyan-400 mr-1.5"></i>Sports & Padel
+            </button>
+            <button onclick="quickFilterKeyword('masterchef')" class="px-3.5 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700 transition">
+              <i class="fa-solid fa-tv text-purple-400 mr-1.5"></i>Lifestyle & TV
+            </button>
+            <button onclick="triggerAiResearch()" class="px-3.5 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-xs font-bold text-slate-950 transition shadow-md shadow-orange-500/20">
+              <i class="fa-solid fa-arrows-rotate mr-1.5"></i>Actualizar Todo Hoy
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Filtros de Categoría -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+        <div class="flex items-center space-x-2 overflow-x-auto pb-2 sm:pb-0 custom-scrollbar">
+          <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider mr-1">Filtrar por:</span>
+          <button onclick="filterTrends('todos')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-bold bg-orange-500 text-slate-950 shadow-sm" data-category="todos">Todos</button>
+          <button onclick="filterTrends('Gastronomia')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-category="Gastronomia">Gastronomía</button>
+          <button onclick="filterTrends('Deporte')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-category="Deporte">Deportes & Padel</button>
+          <button onclick="filterTrends('Lifestyle')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-category="Lifestyle">Lifestyle & Moda</button>
+          <button onclick="filterTrends('Publicidad')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300 hover:bg-slate-700" data-category="Publicidad">Publicidad Viral</button>
         </div>
 
-        <p class="text-xs text-slate-400">
-          Pega el link de TikTok, Instagram Reel o YouTube Short que quieras que el equipo de La Cantera analice e inspire a sus talentos.
-        </p>
+        <div class="flex items-center space-x-3">
+          <button onclick="openAddVideoModal()" class="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 rounded-lg transition flex items-center">
+            <i class="fa-solid fa-plus text-orange-400 mr-2"></i>Agregar Video Link
+          </button>
+          <span id="trendsCounterBadge" class="text-xs text-slate-500 font-medium">6 tendencias activas</span>
+        </div>
+      </div>
 
-        <form id="addVideoForm" onsubmit="handleManualAddVideo(event)" class="space-y-3.5">
+      <!-- Grid de Tendencias -->
+      <div id="trendsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Renderizado dinámicamente con JavaScript -->
+      </div>
+    </section>
+
+    <!-- ================= SECCIÓN 2: VIDEOS VIRALES & ENLACES (TIKTOK / REELS / SHORTS) ================= -->
+    <section id="section-videos" class="tab-content hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <h2 class="text-2xl font-display font-extrabold text-white">Videos de Tendencia en TikTok, Instagram y Shorts</h2>
+          <p class="text-sm text-slate-400">Accede directamente al video original en su plataforma oficial para evaluar ganchos, audios y comentarios de la audiencia.</p>
+        </div>
+        
+        <!-- Filtros específicos por plataforma -->
+        <div class="flex items-center space-x-2">
+          <button onclick="filterVideoPlatform('all')" class="vid-platform-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-white border border-slate-700" data-plat="all">Todas las plataformas</button>
+          <button onclick="filterVideoPlatform('TikTok')" class="vid-platform-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-white" data-plat="TikTok">
+            <i class="fa-brands fa-tiktok text-rose-400 mr-1"></i>TikTok
+          </button>
+          <button onclick="filterVideoPlatform('Reels')" class="vid-platform-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-white" data-plat="Reels">
+            <i class="fa-brands fa-instagram text-pink-400 mr-1"></i>Instagram
+          </button>
+          <button onclick="filterVideoPlatform('Shorts')" class="vid-platform-btn px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-900 text-slate-400 border border-slate-800 hover:text-white" data-plat="Shorts">
+            <i class="fa-brands fa-youtube text-red-400 mr-1"></i>Shorts
+          </button>
+        </div>
+      </div>
+
+      <!-- Selector de Talentos para filtrar videos -->
+      <div class="flex items-center space-x-2 overflow-x-auto pb-2 custom-scrollbar">
+        <span class="text-xs text-slate-500 font-semibold uppercase">Filtrar para talento:</span>
+        <button onclick="filterVideosByTalent('all')" class="talent-filter-btn px-3 py-1 rounded-md text-xs font-medium bg-orange-500/20 text-orange-400 border border-orange-500/30">Todos los talentos</button>
+        <button onclick="filterVideosByTalent('Juan Diego Vanegas')" class="talent-filter-btn px-3 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 hover:text-white">🍳 Juan Diego Vanegas</button>
+        <button onclick="filterVideosByTalent('Julieta Piñeres')" class="talent-filter-btn px-3 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 hover:text-white">✨ Julieta Piñeres</button>
+        <button onclick="filterVideosByTalent('Robert Farah')" class="talent-filter-btn px-3 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 hover:text-white">🎾 Robert Farah</button>
+      </div>
+
+      <!-- Grid de Videos Virales con Links Claros -->
+      <div id="viralVideosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Renderizado dinámicamente -->
+      </div>
+    </section>
+
+    <!-- ================= SECCIÓN 3: TALENTOS DE LA CANTERA ================= -->
+    <section id="section-talents" class="tab-content hidden space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <h2 class="text-2xl font-display font-extrabold text-white">Talentos Representados & Ángulos de Contenido</h2>
+          <p class="text-sm text-slate-400">Estrategia, marcas ideales y formatos recomendados según el perfil y la audiencia de cada creador.</p>
+        </div>
+        <button onclick="openNewTalentModal()" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 font-bold rounded-xl text-xs hover:brightness-110 shadow-lg shadow-orange-500/20">
+          <i class="fa-solid fa-user-plus mr-1.5"></i>Agregar Nuevo Talento
+        </button>
+      </div>
+
+      <div id="talentsRosterGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Renderizado de los perfiles de Juan Diego, Julieta y Robert -->
+      </div>
+    </section>
+
+    <!-- ================= SECCIÓN 4: CAMPAÑAS & PUBLICIDAD GLOBAL ================= -->
+    <section id="section-campaigns" class="tab-content hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+        <div>
+          <h2 class="text-2xl font-display font-extrabold text-white">Publicidad Global & Campañas de Influencers</h2>
+          <p class="text-sm text-slate-400">Casos de estudio mundiales, patrocinios de marcas globales y aprendizajes aplicables para presentar a marcas en Colombia.</p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <input type="text" id="campaignSearchInput" placeholder="Buscar marca (ej: Nike, Dyson, Wilson)..." class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-3 py-2 w-48 focus:outline-none focus:border-orange-500">
+          <button onclick="aiSearchCampaigns()" class="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-semibold rounded-lg text-slate-200 border border-slate-700">Explorar</button>
+        </div>
+      </div>
+
+      <div id="campaignsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Renderizado dinámicamente -->
+      </div>
+    </section>
+
+    <!-- ================= SECCIÓN 5: MIROFISH SWARM SIMULATOR ================= -->
+    <section id="section-mirofish" class="tab-content hidden space-y-8">
+      
+      <!-- Encabezado MiroFish -->
+      <div class="rounded-3xl bg-gradient-to-r from-cyan-950/40 via-slate-900 to-slate-950 border border-cyan-500/30 p-6 sm:p-8 relative overflow-hidden">
+        <div class="absolute right-0 top-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10">
+          <div class="inline-flex items-center space-x-2 bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 px-3 py-1 rounded-full text-xs font-bold mb-3">
+            <i class="fa-solid fa-microchip animate-pulse"></i>
+            <span>MiroFish Multi-Agent Engine v2.4</span>
+          </div>
+          <h2 class="text-3xl font-display font-extrabold text-white tracking-tight mb-2">
+            Simulador de Enjambre de Audiencias (Swarm Intelligence)
+          </h2>
+          <p class="text-slate-300 text-sm max-w-2xl leading-relaxed mb-6">
+            Antes de que un talento grabe o publique un video con una marca, pon a prueba la idea en un enjambre de cientos de agentes IA que representan seguidores reales, críticos, directores de marketing y prensa.
+          </p>
+
+          <!-- Tarjetas de pre-configuración rápida -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button onclick="loadMirofishPreset('vanegas')" class="p-3 bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400 rounded-xl text-left transition">
+              <span class="text-xs font-bold text-orange-400 block mb-1">Juan Diego Vanegas</span>
+              <p class="text-xs text-slate-300 font-medium truncate">Campaña Asado con Marca Masiva</p>
+            </button>
+            <button onclick="loadMirofishPreset('pineres')" class="p-3 bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400 rounded-xl text-left transition">
+              <span class="text-xs font-bold text-pink-400 block mb-1">Julieta Piñeres</span>
+              <p class="text-xs text-slate-300 font-medium truncate">Reel de Camerino & Skincare</p>
+            </button>
+            <button onclick="loadMirofishPreset('farah')" class="p-3 bg-slate-900/90 border border-slate-700/80 hover:border-cyan-400 rounded-xl text-left transition">
+              <span class="text-xs font-bold text-cyan-400 block mb-1">Robert Farah</span>
+              <p class="text-xs text-slate-300 font-medium truncate">Reto de Pádel vs Aficionado</p>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuración del Experimento de Simulación -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Panel Izquierdo: Parámetros del Experimento -->
+        <div class="lg:col-span-5 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5">
+          <h3 class="text-base font-bold text-white flex items-center">
+            <i class="fa-solid fa-sliders text-cyan-400 mr-2"></i>Parámetros de la Campaña
+          </h3>
+
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Título o Concepto del Video</label>
-            <input type="text" id="manualVideoTitle" required placeholder="Ej: Receta crujiente en 30s con corte ASMR" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none">
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Talento Asignado</label>
+            <select id="miroTalentSelect" class="w-full bg-slate-950 border border-slate-700 text-sm rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400">
+              <option value="Juan Diego Vanegas">Juan Diego Vanegas (Gastronomía & Parrilla)</option>
+              <option value="Julieta Piñeres">Julieta Piñeres (Lifestyle, Moda & MasterChef)</option>
+              <option value="Robert Farah">Robert Farah (Deporte Élite, Pádel & Bienestar)</option>
+            </select>
           </div>
 
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Enlace del Video (URL TikTok, Instagram o YouTube)</label>
-            <input type="url" id="manualVideoUrl" required placeholder="https://www.tiktok.com/@... o https://www.instagram.com/reel/... o https://youtube.com/shorts/..." class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none">
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Marca Patrocinadora o Producto</label>
+            <input type="text" id="miroBrandInput" placeholder="Ej: Cerveza Andina, Nespresso, Skechers, Wilson" class="w-full bg-slate-950 border border-slate-700 text-sm rounded-xl px-3.5 py-2.5 text-white focus:outline-none focus:border-cyan-400">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Concepto del Video / Gancho Inicial</label>
+            <textarea id="miroConceptInput" rows="3" placeholder="Describe la idea central, el gancho de los primeros 3 segundos y el llamado a la acción..." class="w-full bg-slate-950 border border-slate-700 text-sm rounded-xl p-3 text-white focus:outline-none focus:border-cyan-400 resize-none"></textarea>
           </div>
 
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Talento Sugerido</label>
-              <select id="manualVideoTalent" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none">
-                <option value="Juan Diego Vanegas">Juan Diego Vanegas</option>
-                <option value="Julieta Piñeres">Julieta Piñeres</option>
-                <option value="Robert Farah">Robert Farah</option>
-                <option value="Nuevo Talento">Nuevo Talento</option>
+              <label class="block text-xs text-slate-400 mb-1">Población de Agentes</label>
+              <select id="miroAgentCount" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2 text-white">
+                <option value="250">250 Agentes (Rápido)</option>
+                <option value="1000" selected>1,000 Agentes (Estándar)</option>
+                <option value="5000">5,000 Agentes (Profundo)</option>
               </select>
             </div>
             <div>
-              <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Categoría</label>
-              <select id="manualVideoCategory" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none">
-                <option value="Gastronomía">Gastronomía</option>
-                <option value="Deporte">Deportes & Padel</option>
-                <option value="Lifestyle">Lifestyle & Moda</option>
-                <option value="Campañas">Campañas</option>
+              <label class="block text-xs text-slate-400 mb-1">Ecosistema Social</label>
+              <select id="miroPlatformFocus" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2 text-white">
+                <option value="tiktok_reels">TikTok + Reels (Visual)</option>
+                <option value="twitter_critics">X/Twitter (Riesgo Polémico)</option>
+                <option value="omnichannel">Omnicanal Completo</option>
               </select>
             </div>
           </div>
 
+          <button onclick="runMirofishSimulation()" id="btnRunSimulation" class="w-full py-3.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold rounded-xl text-sm transition shadow-lg shadow-cyan-500/20 flex items-center justify-center">
+            <i class="fa-solid fa-play mr-2"></i>Iniciar Simulación de Enjambre
+          </button>
+        </div>
+
+        <!-- Panel Derecho: Consola de Simulación en Vivo & Predicciones -->
+        <div class="lg:col-span-7 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+          
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Idea de ejecución para el Talento</label>
-            <textarea id="manualVideoTake" rows="2" placeholder="Por qué es bueno este video para nuestro talento..." class="w-full bg-slate-900 text-white text-xs px-3.5 py-2 rounded-xl border border-slate-700 focus:border-brand-500 focus:outline-none"></textarea>
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-4">
+              <h3 class="text-base font-bold text-white flex items-center">
+                <i class="fa-solid fa-terminal text-cyan-400 mr-2"></i>Consola de Reacción Social
+              </h3>
+              <span id="simulationStatusBadge" class="text-xs bg-slate-800 text-slate-400 border border-slate-700 px-2.5 py-1 rounded-full font-medium">En espera</span>
+            </div>
+
+            <!-- Feed de Agentes Simulados (Live Stream) -->
+            <div id="swarmConsoleStream" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar p-3 bg-slate-950/80 rounded-xl border border-slate-800/80 text-xs">
+              <div class="text-slate-500 text-center py-8">
+                <i class="fa-solid fa-users-rays text-3xl text-slate-700 mb-2"></i>
+                <p>Configura la campaña y haz clic en "Iniciar Simulación de Enjambre" para desplegar los agentes.</p>
+              </div>
+            </div>
           </div>
 
-          <div class="flex justify-end gap-2 pt-2">
-            <button type="button" onclick="closeAddVideoModal()" class="px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-white">Cancelar</button>
-            <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-500 hover:bg-brand-600 text-white shadow-md shadow-brand-500/20">Guardar e Incrustar</button>
+          <!-- Métricas de Predicción Emergentes -->
+          <div id="miroResultsContainer" class="hidden space-y-4 pt-4 border-t border-slate-800">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-400">Predicción Emergente (MiroFish Summary)</h4>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                <span class="text-[10px] text-slate-500 block uppercase">Prob. Viralidad</span>
+                <span id="statVirality" class="text-lg font-bold text-emerald-400 font-display">84%</span>
+              </div>
+              <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                <span class="text-[10px] text-slate-500 block uppercase">Sentimiento Positivo</span>
+                <span id="statSentiment" class="text-lg font-bold text-cyan-400 font-display">76%</span>
+              </div>
+              <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                <span class="text-[10px] text-slate-500 block uppercase">Riesgo Crisis PR</span>
+                <span id="statPrRisk" class="text-lg font-bold text-amber-400 font-display">12%</span>
+              </div>
+              <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl">
+                <span class="text-[10px] text-slate-500 block uppercase">Conversión Estimada</span>
+                <span id="statConversion" class="text-lg font-bold text-purple-400 font-display">Alto (4.2%)</span>
+              </div>
+            </div>
+
+            <!-- Recomendación de la IA para la Agencia -->
+            <div id="agencyRecommendationBox" class="p-4 bg-cyan-950/20 border border-cyan-500/30 rounded-xl text-xs text-slate-300 leading-relaxed">
+              <!-- Cargado dinámicamente -->
+            </div>
           </div>
-        </form>
+
+        </div>
+
       </div>
-    </div>
+    </section>
 
-    <!-- TOAST NOTIFICATION BOX -->
-    <div id="toastMessage" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 text-white border border-slate-700 px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 max-w-sm pointer-events-none">
-      <i id="toastIcon" class="fa-solid fa-check text-brand-400"></i>
-      <span id="toastText" class="text-xs font-medium">Notificación</span>
-    </div>
+  </main>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-slate-800/80 bg-darkcard/40 py-6 mt-12 text-center text-xs text-slate-500">
-      <p>La Cantera Influencer Management &reg; Plataforma de Inteligencia Digital y Curaduría de Tendencias.</p>
-    </footer>
-  </div>
+  <!-- ================= MODALES AUXILIARES ================= -->
 
-  <!-- MODAL: VINCULAR NUEVO TALENTO -->
-  <div id="newTalentModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 hidden">
-    <div class="glass-panel w-full max-w-md rounded-3xl border border-slate-700 p-6 space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-user-plus text-brand-400"></i> Nuevo Talento La Cantera
-        </h3>
-        <button onclick="closeNewTalentModal()" class="text-slate-400 hover:text-white p-1">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
+  <!-- Modal Detalle de Tendencia -->
+  <div id="trendDetailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="max-w-2xl w-full bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative">
+      <div id="modalTrendBody" class="p-6">
+        <!-- Rellenado dinámicamente -->
       </div>
-
-      <form id="newTalentForm" onsubmit="handleCreateTalent(event)" class="space-y-3">
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Nombre Completo</label>
-          <input type="text" id="talentInputName" required placeholder="Ej: Mario Mendoza" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Usuario / Redes</label>
-          <input type="text" id="talentInputHandle" required placeholder="@mariomendoza" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Nicho / Especialidad</label>
-          <input type="text" id="talentInputNiche" required placeholder="Literatura / Cultura / Thriller" class="w-full bg-slate-900 text-white text-xs px-3.5 py-2.5 rounded-xl border border-slate-700 focus:border-brand-500 outline-none">
-        </div>
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 uppercase mb-1">Biografía Breve</label>
-          <textarea id="talentInputBio" rows="2" placeholder="Descripción y estilo del creador..." class="w-full bg-slate-900 text-white text-xs px-3.5 py-2 rounded-xl border border-slate-700 focus:border-brand-500 outline-none"></textarea>
-        </div>
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeNewTalentModal()" class="px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-white">Cancelar</button>
-          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-brand-500 hover:bg-brand-600 text-white">Guardar Talento</button>
-        </div>
-      </form>
+      <div class="bg-slate-950 px-6 py-4 border-t border-slate-800 flex justify-end">
+        <button onclick="closeTrendModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition">Cerrar</button>
+      </div>
     </div>
   </div>
 
+  <!-- Modal Agregar Video Manualmente -->
+  <div id="addVideoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative">
+      <h3 class="text-lg font-bold font-display text-white mb-2">Agregar Enlace de Video</h3>
+      <p class="text-xs text-slate-400 mb-4">Pega la URL de TikTok, Instagram Reel o YouTube Short para incluirla en el radar de La Cantera.</p>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Título / Concepto</label>
+          <input type="text" id="manualVideoTitle" placeholder="Ej: Truco de sellado de carne en 30s" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2.5 text-white">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">URL Directa del Video</label>
+          <input type="url" id="manualVideoUrl" placeholder="https://www.tiktok.com/... o https://www.instagram.com/reel/..." class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2.5 text-white">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Plataforma</label>
+            <select id="manualVideoPlatform" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2 text-white">
+              <option value="TikTok">TikTok</option>
+              <option value="Reels">Instagram Reel</option>
+              <option value="Shorts">YouTube Short</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Asignar a Talento</label>
+            <select id="manualVideoTalent" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2 text-white">
+              <option value="Juan Diego Vanegas">Juan Diego Vanegas</option>
+              <option value="Julieta Piñeres">Julieta Piñeres</option>
+              <option value="Robert Farah">Robert Farah</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end space-x-2">
+        <button onclick="closeAddVideoModal()" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs rounded-lg">Cancelar</button>
+        <button onclick="handleManualAddVideo()" class="px-4 py-2 bg-orange-500 text-slate-950 font-bold text-xs rounded-lg hover:brightness-110">Guardar Video</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Nuevo Talento -->
+  <div id="newTalentModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+    <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl relative">
+      <h3 class="text-lg font-bold font-display text-white mb-2">Registrar Nuevo Talento</h3>
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Nombre Completo</label>
+          <input type="text" id="newTalentName" placeholder="Ej: Mariana Gómez" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2.5 text-white">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Especialidad / Nicho</label>
+          <input type="text" id="newTalentNiche" placeholder="Ej: Música, Actuación, Fitness" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2.5 text-white">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Marcas Ideales</label>
+          <input type="text" id="newTalentBrands" placeholder="Ej: Sony, Adidas, Sephora" class="w-full bg-slate-950 border border-slate-700 text-xs rounded-lg p-2.5 text-white">
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end space-x-2">
+        <button onclick="closeNewTalentModal()" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs rounded-lg">Cancelar</button>
+        <button onclick="handleCreateTalent()" class="px-4 py-2 bg-orange-500 text-slate-950 font-bold text-xs rounded-lg">Guardar Talento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast de Notificaciones -->
+  <div id="appToast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition duration-300 bg-slate-900 border border-slate-700 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center space-x-3 text-xs">
+    <i class="fa-solid fa-circle-check text-orange-400 text-sm" id="toastIcon"></i>
+    <span id="toastMsg">Acción completada con éxito</span>
+  </div>
+
+  <!-- ================= JAVASCRIPT DE LA APLICACIÓN ================= -->
   <script>
-    // System password configuration
-    const ACCESS_PASS = "cantera2025";
-    const ALT_PASS = "1234";
-
-    // Application state
+    // -------------------------------------------------------------
+    // BASE DE DATOS INICIAL
+    // -------------------------------------------------------------
     let trendsData = [
       {
-        id: "trend-tiktok-1",
+        id: 't-1',
+        category: 'Gastronomia',
+        platform: 'TikTok',
+        retention: '+320% retención TikTok',
+        views: '4.8M views',
         title: "TikTok Viral: Asado & Corte Crujiente ASMR en 25 Segundos",
-        category: "Gastronomía",
-        platform: "TikTok",
-        platformType: "TikTok",
-        videoId: "7218384984251239686",
-        videoUrl: "https://www.tiktok.com/tag/recetasvirales",
-        growth: "+320% retención TikTok",
-        thumbnailImg: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop&q=80",
-        description: "Formato ultra dinámico en TikTok: audio ambiente amplificado (corte de cuchillo, fuego vivo), texto en el primer segundo y receta condensada sin rodeos.",
-        agencyTake: "Clave para Juan Diego Vanegas: Grabar cortes de carne a la parrilla con cámara fija frontal y micrófono cerca. Hook: 'El error que cometes al asar carne y te la seca'.",
-        suitableTalent: "Juan Diego Vanegas",
-        metrics: "4.8M views en TikTok",
-        date: "Hoy"
+        description: "Formato de sonido envolvente de sellado de carne en fuego directo, corte crujiente y tip exprés de adobo casero.",
+        targetTalents: ['Juan Diego Vanegas'],
+        insights: "Los primeros 2 segundos tienen que arrancar con el sonido seco del cuchillo contra la corteza. Cero introducciones habladas.",
+        hook3s: "¿Estás cometiendo este error fatal cada vez que prendes el carbón?",
+        format: 'Video Vertical ASMR / Micro-receta',
+        videoUrl: 'https://www.tiktok.com/tag/recetasvirales',
+        thumbnail: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80'
       },
       {
-        id: "trend-ig-1",
+        id: 't-2',
+        category: 'Lifestyle',
+        platform: 'Reels',
+        retention: '+190% comentarios IG',
+        views: '1.9M views',
         title: "Instagram Reel: GRWM 'Backstage & Antes de Grabar MasterChef'",
-        category: "Lifestyle",
-        platform: "Instagram Reels",
-        platformType: "Instagram",
-        videoId: "masterchef-grwm",
-        videoUrl: "https://www.instagram.com/explore/tags/masterchefcelebrity/",
-        growth: "+190% comentarios IG",
-        thumbnailImg: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&auto=format&fit=crop&q=80",
-        description: "Reel vertical de estilo vlog rápido: vestuario elegante, retoques de maquillaje express y confidencias de camerino antes de salir a set.",
-        agencyTake: "Excelente para Julieta Piñeres: Combina su carisma como presentadora y su participación en MasterChef. Patrocinable por marcas de skincare y moda.",
-        suitableTalent: "Julieta Piñeres",
-        metrics: "1.9M views en Instagram",
-        date: "Hoy"
+        description: "Camerino dinámico mostrando la preparación de vestuario, retoque de maquillaje y el secreto de energía para jornadas de 12 horas.",
+        targetTalents: ['Julieta Piñeres'],
+        insights: "La cercanía de mostrar 'lo que nadie ve en TV' genera 3 veces más comentarios y engagement que una foto editorial clásica.",
+        hook3s: "Esto es todo lo que pasa 10 minutos antes de que digan: ¡3, 2, 1 al aire!",
+        format: 'Vlog Rápido / Get Ready With Me (GRWM)',
+        videoUrl: 'https://www.instagram.com/explore/tags/masterchefcelebrity/',
+        thumbnail: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80'
       },
       {
-        id: "trend-tiktok-2",
-        title: "TikTok Trend: Reto de Padel 'Tenista Pro vs. Aficionado en Pista Rápida'",
-        category: "Deporte",
-        platform: "TikTok",
-        platformType: "TikTok",
-        videoId: "padel-pro-challenge",
-        videoUrl: "https://www.tiktok.com/tag/padel",
-        growth: "+245% compartidos TikTok",
-        thumbnailImg: "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=500&auto=format&fit=crop&q=80",
-        description: "Video de desafío rápido en TikTok: cómo un ex número 1 de Wimbledon responde saques de padel con una sartén o enseña a volear en 30 segundos con efecto visual.",
-        agencyTake: "Propuesta para Robert Farah: Desafíos virales de padel con creadores invitados. Atrae audiencia joven de TikTok y marcas deportivas.",
-        suitableTalent: "Robert Farah",
-        metrics: "3.4M views en TikTok",
-        date: "Hoy"
+        id: 't-3',
+        category: 'Deporte',
+        platform: 'TikTok',
+        retention: '+245% compartidos TikTok',
+        views: '3.4M views',
+        title: "TikTok Trend: Reto de Pádel 'Tenista Pro vs. Aficionado en Pista Rápida'",
+        description: "Contraste humorístico y técnico donde un profesional del tenis intenta devolver bolas con sartenes o raquetas vintage.",
+        targetTalents: ['Robert Farah'],
+        insights: "El contenido cruzado entre el auge del pádel y la maestría del tenis profesional es altamente compartible en grupos de WhatsApp.",
+        hook3s: "¿Puede un campeón de Grand Slam ganarme un punto jugando con una tabla de madera?",
+        format: 'Reto de habilidad / Entretenimiento Deportivo',
+        videoUrl: 'https://www.tiktok.com/tag/padel',
+        thumbnail: 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&auto=format&fit=crop&q=80'
       },
       {
-        id: "trend-ig-2",
-        title: "Instagram Reel: 'El Truco de los 3 Ingredientes Prohibidos'",
-        category: "Gastronomía",
-        platform: "Instagram Reels",
-        platformType: "Instagram",
-        videoId: "food-hacks-ig",
-        videoUrl: "https://www.instagram.com/explore/tags/foodhacks/",
-        growth: "+140% guardados en IG",
-        thumbnailImg: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&auto=format&fit=crop&q=80",
-        description: "Reel gastronómico de alta estética visual con música en tendencia de Instagram. Resolución rápida de una salsa o aderezo secreto en primeros planos.",
-        agencyTake: "Alineado para Juan Diego Vanegas: Compartir secretos que incentiven a guardar la publicación (métrica clave del algoritmo de Reels).",
-        suitableTalent: "Juan Diego Vanegas",
-        metrics: "850K guardados en IG",
-        date: "Ayer"
+        id: 't-4',
+        category: 'Publicidad',
+        platform: 'Reels',
+        retention: '+410% guardados',
+        views: '6.2M views',
+        title: "Reel Comercial: 'El Unboxing Cinematográfico con Iluminación Natural'",
+        description: "Integración orgánica de producto donde la marca aparece como parte indispensable de la rutina diaria sin sonar a comercial tradicional.",
+        targetTalents: ['Julieta Piñeres', 'Juan Diego Vanegas'],
+        insights: "Los productos deben ser usados en una acción real, no solo mostrados a la cámara. La iluminación suave eleva el valor de marca.",
+        hook3s: "Tardé 6 meses en encontrar la solución exacta para esto...",
+        format: 'Product Placement Orgánico',
+        videoUrl: 'https://www.instagram.com/explore/tags/lifestyle/',
+        thumbnail: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800&auto=format&fit=crop&q=80'
       },
       {
-        id: "trend-tiktok-3",
-        title: "TikTok Trend: 'Qué llevo en mi bolso de viaje VIP'",
-        category: "Campañas",
-        platform: "TikTok",
-        platformType: "TikTok",
-        videoId: "whatsinmybag-vip",
-        videoUrl: "https://www.tiktok.com/tag/whatsinmybag",
-        growth: "+180% clics de compra",
-        thumbnailImg: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=500&auto=format&fit=crop&q=80",
-        description: "Contenido de unboxing y esenciales de cuidado personal que parece 100% orgánico pero integra productos patrocinados de lujo con alta conversión.",
-        agencyTake: "Para Julieta Piñeres: Campaña perfecta para aerolíneas, marcas de maletas premium, perfumes y gadgets de cuidado de cabello.",
-        suitableTalent: "Julieta Piñeres",
-        metrics: "2.7M views en TikTok",
-        date: "Ayer"
+        id: 't-5',
+        category: 'Gastronomia',
+        platform: 'Shorts',
+        retention: '+85% retención media',
+        views: '890K views',
+        title: "YouTube Short: La Salsa Secreta que Eleva Cualquier Carne",
+        description: "Tutorial vertical de 40 segundos con ritmo acelerado y texto en pantalla sincronizado con el beat musical.",
+        targetTalents: ['Juan Diego Vanegas'],
+        insights: "Usar primeros planos (macro) de la emulsión de la salsa garantiza que el usuario repita el video (bucle perfecto).",
+        hook3s: "No vuelvas a servir carne seca sin hacer este chimichurri en 60 segundos.",
+        format: 'Tutorial Acelerado con Macro Shots',
+        videoUrl: 'https://www.youtube.com/results?search_query=juan+diego+vanegas+recetas+shorts',
+        thumbnail: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80'
       },
       {
-        id: "trend-yt-1",
-        title: "YouTube Shorts: Los Mitos de Cocina que Todos Creen (Juan Diego Vanegas)",
-        category: "Gastronomía",
-        platform: "YouTube Shorts",
-        platformType: "YouTube",
-        videoId: "5JTTzCs4dNU",
-        videoUrl: "https://www.youtube.com/watch?v=5JTTzCs4dNU",
-        embedUrl: "https://www.youtube.com/embed/5JTTzCs4dNU",
-        growth: "+115% viralidad",
-        thumbnailImg: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500&auto=format&fit=crop&q=80",
-        description: "Cápsula vertical de Juan Diego explicando en menos de 40 segundos por qué sellar la carne no encierra los jugos y cómo hacerlo como profesional.",
-        agencyTake: "Posicionamiento educativo y de autoridad culinaria en YouTube Shorts con réplica directa en TikTok.",
-        suitableTalent: "Juan Diego Vanegas",
-        metrics: "1.2M views en Shorts",
-        date: "Hoy"
+        id: 't-6',
+        category: 'Deporte',
+        platform: 'Reels',
+        retention: '+180% alcance',
+        views: '1.2M views',
+        title: "Instagram Reel: La Rutina de Movilidad y Prevención de Lesiones",
+        description: "3 ejercicios claves antes de entrar a cancha para cuidar hombros, rodillas y codos, ideal para deportistas amateurs.",
+        targetTalents: ['Robert Farah'],
+        insights: "Los videos de salud deportiva tienen la tasa más alta de 'Guardados' en Instagram para ser consultados después en el gimnasio.",
+        hook3s: "Si juegas pádel o tenis los fines de semana, salva tus codos con estos 2 minutos.",
+        format: 'Guía Rápida de Salud y Rendimiento',
+        videoUrl: 'https://www.instagram.com/explore/tags/tennis/',
+        thumbnail: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80'
       }
     ];
 
-    let agencyTalents = [
+    let talentsData = [
       {
-        id: "talent-juandiego",
-        name: "Juan Diego Vanegas",
-        handle: "@juandiegovanegasl",
-        niche: "Gastronomía / Foodie / Asados",
-        followers: "1.2M+",
-        avatar: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&auto=format&fit=crop&q=80",
-        bio: "Chef profesional, presentador de televisión y maestro de la parrilla colombiana. Experto en cocina rápida, hamburguesas y MasterChef.",
-        status: "Exclusivo de La Cantera",
-        topFormats: ["Recetas de parrilla en 40s", "Batallas de sabor", "Hacks de cocina con famosos"]
+        name: 'Juan Diego Vanegas',
+        role: 'Chef Celebridad, Parrilla & Creador Foodie',
+        bio: 'Referente nacional de la cocina a la brasa, carnes premium y formatos gastronómicos rápidos en televisión y redes.',
+        avatar: 'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&auto=format&fit=crop&q=80',
+        idealBrands: 'Cerveceras, Marcas de Asadores, Carnes Maduradas, Supermercados, Cuchillos & Especias',
+        bestFormat: 'ASMR Parrillero, Recetas en 30s, Batallas Culinarias',
+        status: 'En campaña activa'
       },
       {
-        id: "talent-julieta",
-        name: "Julieta Piñeres",
-        handle: "@julietapineres",
-        niche: "Lifestyle / Moda / Televisión",
-        followers: "750K+",
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
-        bio: "Presentadora y periodista destacada. Icono de elegancia, estilo de vida saludable, tendencias y participante estelar en formatos gastronómicos y realities.",
-        status: "Exclusivo de La Cantera",
-        topFormats: ["GRWM Backstage", "Rutinas de Skincare", "Viajes & Gastronomía con estilo"]
+        name: 'Julieta Piñeres',
+        role: 'Presentadora de TV, MasterChef, Moda & Lifestyle',
+        bio: 'Figura de elegancia y carisma en la televisión colombiana, con una audiencia fiel en moda, bienestar y maternidad moderna.',
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+        idealBrands: 'Cosmética de Lujo, Marcas de Moda, Electrodomésticos de Diseño, Joyería, Hotelería',
+        bestFormat: 'GRWM Backstage, Storytelling de Camerino, Guías de Estilo',
+        status: 'Grabando MasterChef'
       },
       {
-        id: "talent-robert",
-        name: "Robert Farah",
-        handle: "@robertfarah",
-        niche: "Deporte Élite / Padel / Wellness",
-        followers: "480K+",
-        avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80",
-        bio: "Campeón de Wimbledon y US Open, ex número 1 del mundo en dobles. Referente en preparación física, técnica de pádel y hábitos de alto rendimiento.",
-        status: "Exclusivo de La Cantera",
-        topFormats: ["Clínicas de pádel express", "Retos Pro vs Amateur", "Mindset de campeón & Recuperación"]
+        name: 'Robert Farah',
+        role: 'Ex N°1 del Mundo en Tenis, Mentor Deportivo & Pádel',
+        bio: 'Campeón de Wimbledon y US Open. Autoridad máxima en disciplina, alto rendimiento deportivo y el crecimiento del pádel.',
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80',
+        idealBrands: 'Ropa Deportiva Élite, Palas de Pádel, Suplementos, Relojería, Movilidad Sostenible',
+        bestFormat: 'Retos Pro vs Aficionado, Masterclass de Técnica, Mentalidad de Triunfo',
+        status: 'Disponible para marcas'
       }
     ];
 
-    let globalCampaigns = [
-      {
-        brand: "Nespresso & George Clooney / David Beckham",
-        region: "Global",
-        talentType: "Celebridades y Maestros del Café",
-        concept: "Elegancia matutina y café de origen sin filtros.",
-        takeaway: "Para Juan Diego Vanegas: Crear rituales de café matutino antes de encender fogones de asado.",
-        kpi: "+23% ventas de máquinas"
-      },
-      {
-        brand: "Wilson Padel x Creadores Europeos",
-        region: "Europa / LatAm",
-        talentType: "Ex Tenistas y Creadores de Contenido",
-        concept: "Reto 'De la Cancha de Tenis a la Jaula de Padel'.",
-        takeaway: "Para Robert Farah: Crear miniserie enseñando la transición del tenis al pádel con palas de marca aliada.",
-        kpi: "38M impresiones orgánicas"
-      },
-      {
-        brand: "Dyson Hair & VOGUE Runway",
-        region: "LatAm / USA",
-        talentType: "Presentadoras y Modelos de TV",
-        concept: "Transformación de peinado en camerino en 5 minutos.",
-        takeaway: "Para Julieta Piñeres: Contenido backstage en MasterChef mostrando cómo cuida su cabello entre luces de set.",
-        kpi: "8.4x retorno de inversión"
-      }
-    ];
-
-    function getPlatformBadge(platform) {
-      const p = (platform || "").toLowerCase();
-      if (p.includes("tiktok")) {
-        return '<span class="px-2 py-0.5 text-[10px] font-bold rounded bg-pink-500/20 text-pink-400 border border-pink-500/30 flex items-center gap-1"><i class="fa-brands fa-tiktok"></i> TikTok</span>';
-      } else if (p.includes("instagram") || p.includes("reel")) {
-        return '<span class="px-2 py-0.5 text-[10px] font-bold rounded bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center gap-1"><i class="fa-brands fa-instagram"></i> Reels</span>';
-      } else {
-        return '<span class="px-2 py-0.5 text-[10px] font-bold rounded bg-red-500/20 text-red-400 border border-red-500/30 flex items-center gap-1"><i class="fa-brands fa-youtube"></i> Shorts</span>';
-      }
-    }
-
-    function createInteractiveVideoCard(vid) {
-      const isTikTok = (vid.platformType || '').toLowerCase().includes('tiktok') || (vid.platform || '').toLowerCase().includes('tiktok');
-      const isInstagram = (vid.platformType || '').toLowerCase().includes('instagram') || (vid.platform || '').toLowerCase().includes('instagram') || (vid.platform || '').toLowerCase().includes('reel');
-      const isYouTube = (vid.platformType || '').toLowerCase().includes('youtube') || (vid.platform || '').toLowerCase().includes('youtube');
-
-      const platformColor = isTikTok ? 'text-pink-400 border-pink-500/40 bg-pink-500/10' : isInstagram ? 'text-rose-400 border-rose-500/40 bg-rose-500/10' : 'text-red-400 border-red-500/40 bg-red-500/10';
-      const iconClass = isTikTok ? 'fa-brands fa-tiktok text-pink-400' : isInstagram ? 'fa-brands fa-instagram text-rose-400' : 'fa-brands fa-youtube text-red-500';
-      const actionBtnBg = isTikTok ? 'bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white shadow-pink-500/20' : isInstagram ? 'bg-gradient-to-r from-rose-600 to-purple-600 hover:from-rose-500 hover:to-purple-500 text-white shadow-purple-500/20' : 'bg-red-600 hover:bg-red-500 text-white';
-
-      let previewHtml = "";
-
-      if (isYouTube && vid.embedUrl) {
-        previewHtml = `
-          <div class="relative w-full rounded-2xl overflow-hidden bg-black aspect-video border border-slate-800 shadow-lg">
-            <iframe 
-              src="${vid.embedUrl}" 
-              title="${vid.title}" 
-              class="w-full h-full border-0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen>
-            </iframe>
-          </div>
-        `;
-      } else {
-        previewHtml = `
-          <div class="relative w-full h-52 rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 group shadow-lg">
-            <img src="${vid.thumbnailImg || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'}" alt="${vid.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80 group-hover:opacity-95">
-            <div class="absolute inset-0 bg-gradient-to-t from-darkbg via-black/40 to-black/20 flex flex-col justify-between p-3.5">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-lg border backdrop-blur-md ${platformColor} flex items-center gap-1.5">
-                  <i class="${iconClass}"></i> ${vid.platform}
-                </span>
-                <span class="px-2 py-0.5 text-[10px] rounded-md bg-black/70 text-emerald-400 font-semibold border border-white/10">
-                  ${vid.growth}
-                </span>
-              </div>
-
-              <a href="${vid.videoUrl}" target="_blank" rel="noopener noreferrer" class="self-center flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/30 text-white text-xs font-bold shadow-2xl transition hover:scale-105">
-                <i class="fa-solid fa-circle-play text-lg ${isTikTok ? 'text-pink-400' : 'text-rose-400'}"></i>
-                <span>Ver Video en ${vid.platform}</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-              </a>
-
-              <div class="flex items-center justify-between text-[11px] text-slate-300">
-                <span class="font-bold flex items-center gap-1">
-                  <i class="fa-solid fa-eye text-slate-400"></i> ${vid.metrics || 'Tendencia'}
-                </span>
-                <span class="text-slate-400 text-[10px]">${vid.date || 'Actualizado hoy'}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      }
-
-      return `
-        <div class="glass-panel rounded-3xl p-4 sm:p-5 border border-slate-800 hover:border-brand-500/40 transition flex flex-col justify-between space-y-4 shadow-xl">
-          ${previewHtml}
-
-          <div class="space-y-2">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-slate-800 text-brand-400">
-                ${vid.category}
-              </span>
-              <span class="text-[11px] text-slate-400 flex items-center gap-1">
-                <i class="fa-solid fa-user-check text-brand-500"></i> ${vid.suitableTalent}
-              </span>
-            </div>
-
-            <h4 class="text-sm font-bold text-white line-clamp-2 leading-snug">${vid.title}</h4>
-            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed">${vid.description}</p>
-          </div>
-
-          <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2 text-xs">
-            <div class="flex items-center gap-2 overflow-hidden">
-              <i class="fa-solid fa-link text-brand-400 text-[11px] shrink-0"></i>
-              <span class="text-slate-400 text-[11px] truncate font-mono">${vid.videoUrl}</span>
-            </div>
-            <button onclick="copyLinkToClipboard('${vid.videoUrl}')" title="Copiar enlace" class="shrink-0 p-1.5 px-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 text-[11px] transition">
-              <i class="fa-regular fa-copy"></i>
-            </button>
-          </div>
-
-          <div class="p-3 rounded-2xl bg-slate-900/80 border border-slate-800/80 text-xs space-y-1">
-            <span class="text-amber-400 font-semibold text-[11px] flex items-center gap-1">
-              <i class="fa-solid fa-lightbulb"></i> ¿Cómo aplicarlo para ${vid.suitableTalent}?
-            </span>
-            <p class="text-slate-300 text-[11px] leading-relaxed line-clamp-3">${vid.agencyTake}</p>
-          </div>
-
-          <div class="pt-1 flex items-center justify-between gap-2 border-t border-slate-800/80">
-            <a href="${vid.videoUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-3 rounded-xl ${actionBtnBg} shadow-md text-xs font-bold text-center flex items-center justify-center gap-1.5 transition">
-              <span>Abrir en ${vid.platform}</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
-            </a>
-            <button onclick="pitchThisCampaign('${vid.title.replace(/'/g, "\\'")}', '${vid.suitableTalent.replace(/'/g, "\\'")}')" title="Crear Guion" class="py-2.5 px-3.5 bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center gap-1">
-              <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i>
-              <span>Guion</span>
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function renderTrends(list) {
-      const grid = document.getElementById("trendsGrid");
-      if (!grid) return;
-      grid.innerHTML = "";
-
-      if (list.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-12 text-center text-slate-500">
-            <i class="fa-solid fa-search text-3xl mb-2"></i>
-            <p>No se encontraron tendencias para esta categoría.</p>
-          </div>
-        `;
-        return;
-      }
-
-      list.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "glass-panel rounded-2xl p-5 border border-slate-800 hover:border-brand-500/40 transition duration-300 flex flex-col justify-between group";
-
-        card.innerHTML = `
-          <div onclick="openTrendModal('${item.id}')" class="cursor-pointer">
-            <div class="flex items-center justify-between mb-3">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-slate-800 text-brand-400 border border-slate-700">
-                  ${item.category}
-                </span>
-                ${getPlatformBadge(item.platform)}
-              </div>
-              <span class="text-[11px] font-medium text-emerald-400 flex items-center gap-1">
-                <i class="fa-solid fa-arrow-trend-up"></i> ${item.growth}
-              </span>
-            </div>
-
-            <div class="relative w-full h-36 rounded-xl overflow-hidden mb-3 bg-slate-900 border border-slate-800 group-hover:border-slate-700 transition">
-              <img src="${item.thumbnailImg || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80'}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80 group-hover:opacity-100">
-              <div class="absolute inset-0 bg-gradient-to-t from-darkbg via-transparent to-transparent"></div>
-              <div class="absolute bottom-2.5 left-2.5 flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full bg-brand-500 text-white flex items-center justify-center text-xs shadow-lg shadow-brand-500/40">
-                  <i class="fa-solid fa-play ml-0.5 text-[10px]"></i>
-                </div>
-                <span class="text-[11px] font-bold text-white drop-shadow">${item.metrics || 'Viral'}</span>
-              </div>
-            </div>
-
-            <h3 class="text-sm font-bold text-white group-hover:text-brand-300 transition line-clamp-2 mb-2">
-              ${item.title}
-            </h3>
-
-            <p class="text-xs text-slate-400 mb-3 line-clamp-2 leading-relaxed">
-              ${item.description}
-            </p>
-          </div>
-
-          <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs gap-2">
-            <span class="flex items-center gap-1.5 text-slate-400 truncate text-[11px]">
-              <i class="fa-solid fa-user-tag text-brand-500"></i> ${item.suitableTalent}
-            </span>
-            <div class="flex items-center gap-2 shrink-0">
-              <a href="${item.videoUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" class="text-[11px] font-bold px-3 py-1.5 rounded-lg bg-brand-500/20 hover:bg-brand-500 text-brand-300 hover:text-white border border-brand-500/40 transition flex items-center gap-1">
-                <span>Abrir Link</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
-              </a>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      const counter = document.getElementById("trendsCounter");
-      if (counter) counter.textContent = `${list.length} tendencias activas`;
-    }
-
-    function renderVideoGallery(filterPlatform = "all", filterTalent = "all") {
-      const container = document.getElementById("videoGalleryGrid");
-      if (!container) return;
-      container.innerHTML = "";
-
-      let filtered = trendsData.filter(v => v.videoUrl);
-
-      if (filterPlatform !== "all") {
-        filtered = filtered.filter(v => {
-          const p = (v.platform || "").toLowerCase() + (v.platformType || "").toLowerCase();
-          return p.includes(filterPlatform.toLowerCase());
-        });
-      }
-
-      if (filterTalent !== "all") {
-        filtered = filtered.filter(v => (v.suitableTalent || "").toLowerCase().includes(filterTalent.toLowerCase()));
-      }
-
-      // Update counters
-      const totalAll = trendsData.filter(v => v.videoUrl).length;
-      const totalTiktok = trendsData.filter(v => ((v.platform || "") + (v.platformType || "")).toLowerCase().includes("tiktok")).length;
-      const totalIg = trendsData.filter(v => ((v.platform || "") + (v.platformType || "")).toLowerCase().includes("instagram") || ((v.platform || "")).toLowerCase().includes("reel")).length;
-      const totalYt = trendsData.filter(v => ((v.platform || "") + (v.platformType || "")).toLowerCase().includes("youtube")).length;
-
-      const cAll = document.getElementById("count-all-vids");
-      const cTk = document.getElementById("count-tiktok-vids");
-      const cIg = document.getElementById("count-ig-vids");
-      const cYt = document.getElementById("count-yt-vids");
-
-      if (cAll) cAll.textContent = totalAll;
-      if (cTk) cTk.textContent = totalTiktok;
-      if (cIg) cIg.textContent = totalIg;
-      if (cYt) cYt.textContent = totalYt;
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-16 text-center text-slate-500">
-            <i class="fa-solid fa-video-slash text-4xl mb-3 text-slate-600"></i>
-            <p class="text-sm font-medium text-slate-400">No hay videos en este filtro actualmente.</p>
-            <p class="text-xs text-slate-500 mt-1">Puedes pegar un enlace directo con el botón "Pegar Enlace TikTok / IG".</p>
-          </div>
-        `;
-        return;
-      }
-
-      filtered.forEach(vid => {
-        container.innerHTML += createInteractiveVideoCard(vid);
-      });
-    }
-
-    function renderTalents() {
-      const grid = document.getElementById("talentsGrid");
-      if (!grid) return;
-      grid.innerHTML = "";
-
-      agencyTalents.forEach(talent => {
-        const card = document.createElement("div");
-        card.className = "glass-panel rounded-3xl p-6 border border-slate-800 hover:border-brand-500/50 transition duration-300 flex flex-col justify-between relative overflow-hidden group";
-
-        card.innerHTML = `
-          <div>
-            <div class="flex items-center gap-4 mb-4">
-              <img src="${talent.avatar}" alt="${talent.name}" class="w-16 h-16 rounded-2xl object-cover border-2 border-brand-500/40 shadow-lg">
-              <div>
-                <h3 class="text-lg font-bold text-white group-hover:text-brand-400 transition">${talent.name}</h3>
-                <p class="text-xs text-brand-400 font-medium">${talent.handle}</p>
-                <span class="inline-block mt-1 px-2.5 py-0.5 text-[10px] rounded-full bg-slate-800 text-slate-300 border border-slate-700">
-                  ${talent.niche}
-                </span>
-              </div>
-            </div>
-
-            <p class="text-xs text-slate-400 mb-4 leading-relaxed">${talent.bio}</p>
-
-            <div class="space-y-1.5 mb-4">
-              <span class="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Formatos Estrella:</span>
-              <div class="flex flex-wrap gap-1.5">
-                ${talent.topFormats.map(f => `<span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-900 text-slate-300 border border-slate-800">${f}</span>`).join('')}
-              </div>
-            </div>
-          </div>
-
-          <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
-            <button onclick="focusTalent('${talent.name}')" class="flex-1 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition border border-slate-700">
-              Ver Oportunidades
-            </button>
-            <button onclick="openIdeaModalForTalent('${talent.name}')" class="px-3 py-2 rounded-xl text-xs font-semibold bg-brand-500 hover:bg-brand-600 text-white transition flex items-center gap-1">
-              <i class="fa-solid fa-wand-magic-sparkles"></i>
-              <span>Guion</span>
-            </button>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      focusTalent(agencyTalents[0].name);
-    }
-
-    function renderCampaigns() {
-      const container = document.getElementById("campaignsContainer");
-      if (!container) return;
-      container.innerHTML = "";
-
-      globalCampaigns.forEach(c => {
-        const item = document.createElement("div");
-        item.className = "glass-panel p-6 rounded-3xl border border-slate-800 space-y-3";
-        item.innerHTML = `
-          <div class="flex items-center justify-between">
-            <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30">
-              ${c.brand}
-            </span>
-            <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
-              <i class="fa-solid fa-chart-pie"></i> ${c.kpi}
-            </span>
-          </div>
-
-          <p class="text-sm font-semibold text-white leading-snug">${c.concept}</p>
-
-          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-800/80 space-y-1">
-            <span class="text-[10px] uppercase font-bold text-brand-400 tracking-wider">Aplicación para La Cantera:</span>
-            <p class="text-xs text-slate-300 leading-relaxed">${c.takeaway}</p>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    // ================= FILTER AND MODAL CONTROLLERS =================
-
-    let currentFilterCategory = 'all';
-
-    function filterTrends(category, btnElement) {
-      currentFilterCategory = category;
-      document.querySelectorAll('.chip-filter').forEach(btn => {
-        btn.classList.remove('bg-brand-500', 'text-white', 'active');
-        btn.classList.add('bg-slate-800/70', 'text-slate-400');
-      });
-      if (btnElement) {
-        btnElement.classList.add('bg-brand-500', 'text-white', 'active');
-        btnElement.classList.remove('bg-slate-800/70', 'text-slate-400');
-      }
-
-      if (category === 'all') {
-        renderTrends(trendsData);
-      } else {
-        const filtered = trendsData.filter(t => (t.category || '').toLowerCase().includes(category.toLowerCase()));
-        renderTrends(filtered);
-      }
-    }
-
-    let activeVideoPlatform = 'all';
-    let activeVideoTalent = 'all';
-
-    function filterVideoPlatform(platform, btnElement) {
-      activeVideoPlatform = platform;
-      document.querySelectorAll('.vid-platform-chip').forEach(btn => {
-        btn.classList.remove('bg-brand-500', 'text-white', 'active');
-        btn.classList.add('bg-slate-900', 'text-slate-300');
-      });
-      if (btnElement) {
-        btnElement.classList.add('bg-brand-500', 'text-white', 'active');
-        btnElement.classList.remove('bg-slate-900', 'text-slate-300');
-      }
-      renderVideoGallery(activeVideoPlatform, activeVideoTalent);
-    }
-
-    function filterVideosByTalent(talent) {
-      activeVideoTalent = talent;
-      renderVideoGallery(activeVideoPlatform, activeVideoTalent);
-    }
-
-    function openTrendModal(trendId) {
-      const item = trendsData.find(t => t.id === trendId);
-      if (!item) return;
-
-      const modal = document.getElementById("trendDetailModal");
-      document.getElementById("modalCategoryTag").textContent = item.category || "Tendencia";
-      document.getElementById("modalDateTag").textContent = item.date || "Hoy";
-      document.getElementById("modalTitle").textContent = item.title;
-      document.getElementById("modalDescription").textContent = item.description;
-      document.getElementById("modalAgencyTake").textContent = item.agencyTake;
-
-      const videoSec = document.getElementById("modalVideoSection");
-      const videoCont = document.getElementById("modalVideoContainer");
-      const extLink = document.getElementById("modalExternalLink");
-
-      if (item.videoUrl) {
-        videoSec.classList.remove("hidden");
-        extLink.href = item.videoUrl;
-        if (item.embedUrl) {
-          videoCont.innerHTML = `<iframe src="${item.embedUrl}" class="w-full h-full border-0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-        } else {
-          videoCont.innerHTML = `
-            <div class="relative w-full h-full group cursor-pointer" onclick="window.open('${item.videoUrl}', '_blank')">
-              <img src="${item.thumbnailImg || ''}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition" />
-              <div class="absolute inset-0 flex items-center justify-center bg-black/40">
-                <div class="px-4 py-2 rounded-xl bg-brand-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg">
-                  <i class="fa-solid fa-play"></i> Abrir en ${item.platform || 'Red Social'}
-                </div>
-              </div>
-            </div>
-          `;
-        }
-      } else {
-        videoSec.classList.add("hidden");
-      }
-
-      document.getElementById("modalActionBtn").onclick = () => {
-        closeTrendModal();
-        pitchThisCampaign(item.title, item.suitableTalent);
-      };
-
-      modal.classList.remove("hidden");
-    }
-
-    function closeTrendModal() {
-      const modal = document.getElementById("trendDetailModal");
-      const videoCont = document.getElementById("modalVideoContainer");
-      if (videoCont) videoCont.innerHTML = "";
-      if (modal) modal.classList.add("hidden");
-    }
-
-    function openAddVideoModal() {
-      document.getElementById("addVideoModal").classList.remove("hidden");
-    }
-
-    function closeAddVideoModal() {
-      document.getElementById("addVideoModal").classList.add("hidden");
-      document.getElementById("addVideoForm").reset();
-    }
-
-    function handleManualAddVideo(e) {
-      e.preventDefault();
-      const title = document.getElementById("manualVideoTitle").value.trim();
-      const url = document.getElementById("manualVideoUrl").value.trim();
-      const talent = document.getElementById("manualVideoTalent").value;
-      const category = document.getElementById("manualVideoCategory").value;
-      const take = document.getElementById("manualVideoTake").value.trim() || `Oportunidad clave para ${talent}`;
-
-      let platform = "Web Video";
-      let platformType = "Web";
-      let embedUrl = null;
-
-      if (url.includes("tiktok.com")) {
-        platform = "TikTok";
-        platformType = "TikTok";
-      } else if (url.includes("instagram.com")) {
-        platform = "Instagram Reels";
-        platformType = "Instagram";
-      } else if (url.includes("youtube.com") || url.includes("youtu.be")) {
-        platform = "YouTube Shorts";
-        platformType = "YouTube";
-        const ytMatch = url.match(/(?:shorts\/|v=|\/embed\/|youtu\.be\/)([\w-]{11})/);
-        if (ytMatch && ytMatch[1]) {
-          embedUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
-        }
-      }
-
-      const newTrend = {
-        id: "trend-user-" + Date.now(),
-        title,
-        category,
-        platform,
-        platformType,
-        videoUrl: url,
-        embedUrl,
-        growth: "+100% Creado por La Cantera",
-        thumbnailImg: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500&auto=format&fit=crop&q=80",
-        description: `Video vinculado manualmente para inspiración de la agencia. Enlace: ${url}`,
-        agencyTake: take,
-        suitableTalent: talent,
-        metrics: "Nuevo ingreso",
-        date: "Hoy"
-      };
-
-      trendsData.unshift(newTrend);
-      renderTrends(trendsData);
-      renderVideoGallery(activeVideoPlatform, activeVideoTalent);
-      closeAddVideoModal();
-      showToast("¡Video viral vinculado exitosamente!", "success");
-    }
-
-    function openNewTalentModal() {
-      document.getElementById("newTalentModal").classList.remove("hidden");
-    }
-
-    function closeNewTalentModal() {
-      document.getElementById("newTalentModal").classList.add("hidden");
-      document.getElementById("newTalentForm").reset();
-    }
-
-    function handleCreateTalent(e) {
-      e.preventDefault();
-      const name = document.getElementById("talentInputName").value.trim();
-      const handle = document.getElementById("talentInputHandle").value.trim();
-      const niche = document.getElementById("talentInputNiche").value.trim();
-      const bio = document.getElementById("talentInputBio").value.trim();
-
-      const newTalent = {
-        id: "talent-" + Date.now(),
-        name,
-        handle,
-        niche,
-        followers: "Cantera Talent",
-        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80",
-        bio: bio || "Nuevo talento incorporado a La Cantera Influencer Management.",
-        status: "Exclusivo de La Cantera",
-        topFormats: ["Formatos Virales", "Colaboraciones", "Branded Content"]
-      };
-
-      agencyTalents.push(newTalent);
-      renderTalents();
-      closeNewTalentModal();
-      showToast(`¡Talento ${name} vinculado al roster!`, "success");
-    }
-
-    function focusTalent(talentName) {
-      const talent = agencyTalents.find(t => t.name === talentName) || agencyTalents[0];
-      const titleSpan = document.getElementById("focusedTalentName");
-      if (titleSpan) titleSpan.textContent = talent.name;
-
-      const recsContainer = document.getElementById("focusedTalentRecommendations");
-      if (!recsContainer) return;
-
-      const opps = {
-        "Juan Diego Vanegas": [
-          { title: "Reto Parrillero con Cerveza Artesanal", hook: "Bañar la carne en cerveza negra: ¿delito o genialidad?", brand: "Cervecerías / Asadores" },
-          { title: "El Almuerzo de los $10.000 COP", hook: "Cocinando nivel restaurante con presupuesto de plaza de mercado", brand: "Supermercados / Retail" },
-          { title: "MasterChef Hacks en 30s", hook: "El error que cometen en TV al picar cebolla y cómo resolverlo", brand: "Cuchillería / Utensilios" }
-        ],
-        "Julieta Piñeres": [
-          { title: "Camerino Secrets & GRWM", hook: "Lo que nadie te cuenta de los llamados a las 5:00 AM para televisión", brand: "Skincare / Alta Cosmética" },
-          { title: "Guía de Estilo: Aeropuerto y Viajes", hook: "3 prendas para verte impecable en un vuelo de 10 horas", brand: "Moda / Maletas de Lujo" },
-          { title: "Backstage MasterChef Confidencial", hook: "Probando los platos detrás de cámaras con los jurados", brand: "Bebidas / Lifestyle" }
-        ],
-        "Robert Farah": [
-          { title: "Clínica de Volea en Pádel en 45s", hook: "Por qué casi todos fallan la bandeja por agarrar mal la pala", brand: "Marcas de Pádel / Clubes" },
-          { title: "Desafío Élite: Devolver saque a 180 km/h", hook: "Poniendo a prueba los reflejos de creadores de contenido", brand: "Bebidas Isotónicas / Automotriz" },
-          { title: "Rutina Matutina de Campeón Grand Slam", hook: "La técnica de estiramiento y respiración de 8 minutos", brand: "Wearables / Suplementos" }
-        ]
-      };
-
-      const talentOpps = opps[talent.name] || [
-        { title: "Campaña de Lanzamiento Personal", hook: "Descubriendo la faceta desconocida del creador", brand: "Marcas de Consumo" },
-        { title: "Crossover con Talentos de La Cantera", hook: "Batalla de talentos: reto culinario y deportivo", brand: "Agencia La Cantera" },
-        { title: "Contenido Exclusivo para Comunidad", hook: "Lo que nunca muestro en mis historias públicas", brand: "Suscripciones / Marcas" }
-      ];
-
-      recsContainer.innerHTML = talentOpps.map(op => `
-        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 hover:border-brand-500/40 transition">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-bold uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded border border-brand-500/20">${op.brand}</span>
-            <button onclick="pitchThisCampaign('${op.title.replace(/'/g, "\\'")}', '${talent.name.replace(/'/g, "\\'")}')" class="text-slate-400 hover:text-white" title="Generar Guion">
-              <i class="fa-solid fa-wand-magic-sparkles text-xs text-amber-400"></i>
-            </button>
-          </div>
-          <h4 class="font-bold text-white text-xs">${op.title}</h4>
-          <p class="text-slate-400 text-[11px] leading-relaxed"><strong class="text-slate-300">Hook:</strong> "${op.hook}"</p>
-        </div>
-      `).join('');
-    }
-
-    function openIdeaModalForTalent(talentName) {
-      switchTab('generator');
-      const select = document.getElementById("genTalentSelect");
-      if (select) {
-        for (let i = 0; i < select.options.length; i++) {
-          if (select.options[i].text.includes(talentName)) {
-            select.selectedIndex = i;
-            break;
-          }
-        }
-      }
-    }
-
-    function pitchThisCampaign(campaignTitle, talentName) {
-      switchTab('generator');
-      const topicInput = document.getElementById("genBrandTopic");
-      if (topicInput) topicInput.value = campaignTitle;
-
-      const select = document.getElementById("genTalentSelect");
-      if (select && talentName) {
-        for (let i = 0; i < select.options.length; i++) {
-          if (select.options[i].text.includes(talentName)) {
-            select.selectedIndex = i;
-            break;
-          }
-        }
-      }
-      generateCreativeBrief();
-    }
-
-    function copyLinkToClipboard(url) {
-      const textarea = document.createElement("textarea");
-      textarea.value = url;
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast("¡Enlace copiado al portapapeles!", "success");
-      } catch (e) {
-        showToast("Error al copiar enlace", "error");
-      }
-      document.body.removeChild(textarea);
-    }
-
-    // ================= AI SEARCH AND GENERATORS =================
-
-    async function triggerAiResearch(query) {
-      if (!query || !query.trim()) {
-        showToast("Escribe un término para buscar tendencias.", "error");
-        return;
-      }
-      fetchFreshAiTrends(query.trim());
-    }
-
-    async function fetchFreshAiTrends(topic = "Tendencias virales de hoy") {
-      const loading = document.getElementById("trendsLoading");
-      const grid = document.getElementById("trendsGrid");
-      if (loading) loading.classList.remove("hidden");
-      if (grid) grid.classList.add("opacity-40");
-
-      showToast(`Escaneando tendencias para: "${topic}"...`, "info");
-
-      const promptText = `Eres el analista jefe de tendencias digitales de la agencia de influencers La Cantera en Colombia.
-Busca y extrae 3 tendencias o formatos virales de TikTok, Instagram Reels y YouTube Shorts relevantes para el tema: "${topic}".
-Los talentos clave son Juan Diego Vanegas (Chef, parrilla), Julieta Piñeres (Lifestyle, MasterChef, TV) y Robert Farah (Tenis, pádel, wellness).
-
-Devuelve EXACTAMENTE un JSON con un array de 3 objetos con este formato:
-[
-  {
-    "title": "Título corto y llamativo del formato",
-    "category": "Gastronomía" o "Deporte" o "Lifestyle" o "Campañas",
-    "platform": "TikTok" o "Instagram Reels" o "YouTube Shorts",
-    "videoUrl": "https://www.tiktok.com/tag/recetasvirales o https://www.instagram.com/explore/tags/masterchefcelebrity/ o https://www.tiktok.com/tag/padel",
-    "growth": "+X% viralidad",
-    "description": "Explicación del hook y dinámica del video en 2 líneas.",
-    "agencyTake": "Cómo debe ejecutarlo el talento de La Cantera.",
-    "suitableTalent": "Juan Diego Vanegas" o "Julieta Piñeres" o "Robert Farah"
-  }
-]`;
-
-      try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        const payload = {
-          contents: [{ parts: [{ text: promptText }] }],
-          generationConfig: { responseMimeType: "application/json" }
-        };
-
-        const res = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (jsonText) {
-          const parsed = JSON.parse(jsonText);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            parsed.forEach((item, idx) => {
-              item.id = "ai-trend-" + Date.now() + "-" + idx;
-              item.date = "Recién detectado";
-              item.thumbnailImg = item.category === "Gastronomía" 
-                ? "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=500&auto=format&fit=crop&q=80"
-                : item.category === "Deporte"
-                ? "https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=500&auto=format&fit=crop&q=80"
-                : "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&auto=format&fit=crop&q=80";
-              trendsData.unshift(item);
-            });
-            renderTrends(trendsData);
-            renderVideoGallery(activeVideoPlatform, activeVideoTalent);
-            showToast("¡3 nuevas tendencias detectadas con IA!", "success");
-          }
-        }
-      } catch (err) {
-        showToast("Escaneo completado con datos del radar local.", "info");
-      } finally {
-        if (loading) loading.classList.add("hidden");
-        if (grid) grid.classList.remove("opacity-40");
-      }
-    }
-
-    async function aiSearchCampaigns() {
-      showToast("Analizando campañas globales de influencers...", "info");
-      const promptText = `Genera 2 estudios de caso breves de campañas mundiales recientes con influencers y atletas (marcas como Porsche, Red Bull, Nespresso, Wilson, etc.) aplicables a Juan Diego Vanegas (Chef), Julieta Piñeres (Lifestyle) o Robert Farah (Tenis/Padel).
-Devuelve un JSON con un array de 2 objetos:
-[
-  {
-    "brand": "Nombre de Marca",
-    "region": "Global / LatAm",
-    "talentType": "Tipo de perfil",
-    "concept": "Idea central de la campaña",
-    "takeaway": "Cómo adaptarlo para los talentos de La Cantera",
-    "kpi": "+X% resultado"
-  }
-]`;
-      try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-        const res = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }], generationConfig: { responseMimeType: "application/json" } })
-        });
-        const data = await res.json();
-        const jsonText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (jsonText) {
-          const list = JSON.parse(jsonText);
-          if (Array.isArray(list)) {
-            list.forEach(c => globalCampaigns.unshift(c));
-            renderCampaigns();
-            showToast("¡Nuevas campañas agregadas a la biblioteca!", "success");
-          }
-        }
-      } catch (e) {
-        showToast("Biblioteca de campañas actualizada.", "info");
-      }
-    }
-
-    async function generateCreativeBrief() {
-      const talent = document.getElementById("genTalentSelect").value;
-      const type = document.getElementById("genTypeSelect").value;
-      const topic = document.getElementById("genBrandTopic").value.trim() || "General de alto impacto";
-
-      const btn = document.getElementById("generateBtn");
-      const wrapper = document.getElementById("genResultWrapper");
-      const output = document.getElementById("genResultOutput");
-
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>Diseñando guion y gancho viral...</span>`;
-      wrapper.classList.remove("hidden");
-      output.textContent = "Analizando perfil del creador, algoritmos de TikTok/Reels y redactando propuesta creativa...";
-
-      const promptText = `Actúa como el director creativo sénior de la agencia de talentos La Cantera en Colombia.
-Crea una propuesta creativa y guion para:
-- TALENTO: ${talent}
-- FORMATO / OBJETIVO: ${type}
-- TEMA O MARCA PATROCINADORA: ${topic}
-
-Estructura la respuesta de forma profesional y lista para compartir:
-1. CONCEPTO CENTRAL Y TÍTULO SUGERIDO
-2. EL GANCHO VIRAL (HOOOK - Primeros 3 segundos con audio y texto en pantalla)
-3. GUION ESTRUCTURADO (0-5s / 5-20s / 20-40s / Cierre con Call To Action)
-4. RETORNO DE MARCA (Cómo se integra de forma orgánica sin que parezca comercial aburrido)
-5. RECOMENDACIÓN DE MÚSICA O TENDENCIA DE AUDIO`;
-
-      try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        const res = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-        });
-
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (text) {
-          output.textContent = text;
-          showToast("¡Propuesta y guion generados con éxito!", "success");
-        } else {
-          throw new Error("Respuesta vacía");
-        }
-      } catch (err) {
-        output.textContent = `=== PROPUESTA CREATIVA LA CANTERA ===\n\nTALENTO: ${talent}\nOBJETIVO: ${type}\n\n1. GANCHO (0-3s): "No cometas este error si quieres que te quede perfecto..."\n2. CUERPO: Transición rápida con sonido ASMR mostrando el secreto que pocos conocen.\n3. INTEGRACIÓN DE MARCA: Producto en uso sin mención invasiva en los primeros 10 segundos.\n4. CTA: "¿Tú lo harías así o prefieres la forma tradicional? Comenta abajo."`;
-        showToast("Propuesta base generada.", "info");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i><span>Crear Propuesta & Ganchos Virales</span>`;
-      }
-    }
-
-    function copyGeneratedIdea() {
-      const text = document.getElementById("genResultOutput").innerText;
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast("¡Guion copiado al portapapeles!", "success");
-      } catch (e) {
-        showToast("Error al copiar texto", "error");
-      }
-      document.body.removeChild(textarea);
-    }
-
-    function handleAuth(e) {
-      e.preventDefault();
-      const input = document.getElementById("passcodeInput").value.trim();
-      const errorMsg = document.getElementById("authError");
-
-      if (input === ACCESS_PASS || input === ALT_PASS) {
-        document.getElementById("authOverlay").classList.add("hidden");
-        document.getElementById("mainApp").classList.remove("hidden");
-        showToast("¡Bienvenido a La Cantera Intelligence Suite!", "success");
-        initApp();
-      } else {
-        errorMsg.classList.remove("hidden");
-      }
-    }
-
-    function logout() {
-      document.getElementById("mainApp").classList.add("hidden");
-      document.getElementById("authOverlay").classList.remove("hidden");
-      document.getElementById("passcodeInput").value = "";
-      document.getElementById("authError").classList.add("hidden");
-      showToast("Sesión cerrada correctamente", "info");
-    }
-
-    function switchTab(tabId) {
-      const tabs = ["feed", "videos", "roster", "campaigns", "mirofish", "generator"];
-      tabs.forEach(t => {
-        const view = document.getElementById(`view-${t}`);
-        const btn = document.getElementById(`tab-${t}`);
-        if (view) view.classList.add("hidden");
-        if (btn) {
-          btn.classList.remove("tab-active");
-          btn.classList.add("bg-slate-900/40", "text-slate-400");
-        }
-      });
-
-      const activeView = document.getElementById(`view-${tabId}`);
-      const activeBtn = document.getElementById(`tab-${tabId}`);
-      if (activeView) activeView.classList.remove("hidden");
-      if (activeBtn) {
-        activeBtn.classList.add("tab-active");
-        activeBtn.classList.remove("bg-slate-900/40", "text-slate-400");
-      }
-
-      if (tabId === "videos") {
-        renderVideoGallery();
-      }
-    }
-
-    // ================= MIROFISH SWARM PREDICTOR LOGIC =================
-    const MIRO_PRESETS = {
-      juandiego: {
-        talent: "Juan Diego Vanegas (Chef / Foodie)",
-        hypothesis: "Juan Diego publica un video en TikTok preparando una punta de anca clásica pero anunciando una salsa dulce procesada de sponsor masivo diciendo: 'El mejor secreto para que tu asado quede perfecto es bañarla en esta salsa'. ¿Cómo reaccionarán los puristas de la carne vs el público general?"
-      },
-      julieta: {
-        talent: "Julieta Piñeres (Lifestyle / TV / MasterChef)",
-        hypothesis: "Julieta graba un 'Get Ready With Me' en su camerino de MasterChef contando una supuesta discusión real entre dos jurados antes de salir a grabar, usando una crema hidratante premium de $150 USD de patrocinador oficial."
-      },
-      robert: {
-        talent: "Robert Farah (Tenista Campeón / Padel / Wellness)",
-        hypothesis: "Robert Farah desafía en un club de pádel en Bogotá a un aficionado con una pala de fibra de carbono de $400 USD y un reloj de lujo visible. Si gana el aficionado, Robert le regala su pala; si Robert gana, el aficionado hace 50 burpees."
-      }
-    };
-
-    function loadMiroPreset(key) {
-      const preset = MIRO_PRESETS[key];
-      if (!preset) return;
-      document.getElementById("miroTalent").value = preset.talent;
-      document.getElementById("miroHypothesis").value = preset.hypothesis;
-      showToast(`Escenario para ${key} cargado en MiroFish`, "info");
-    }
-
-    async function runMiroFishSimulation() {
-      const talent = document.getElementById("miroTalent").value;
-      const hypothesis = document.getElementById("miroHypothesis").value.trim();
-      const agentCount = document.getElementById("miroAgentCount").value;
-      const rounds = document.getElementById("miroRounds").value;
-
-      if (!hypothesis) {
-        showToast("Ingresa una hipótesis o selecciona un escenario pre-cargado.", "error");
-        return;
-      }
-
-      const runBtn = document.getElementById("miroRunBtn");
-      const streamBox = document.getElementById("miroStreamBox");
-      const statusDot = document.getElementById("swarmStatusDot");
-      const statusText = document.getElementById("swarmStatusText");
-      const metricsBar = document.getElementById("miroMetricsBar");
-      const reportWrap = document.getElementById("miroReportWrapper");
-      const reportOutput = document.getElementById("miroReportOutput");
-
-      runBtn.disabled = true;
-      runBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>Simulando enjambre MiroFish...</span>`;
-      statusDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping";
-      statusText.textContent = `Desplegando ${agentCount} agentes en 2 plataformas...`;
-      metricsBar.classList.remove("hidden");
-      reportWrap.classList.add("hidden");
-
-      streamBox.innerHTML = `
-        <div class="p-2.5 rounded-xl bg-cyan-950/40 border border-cyan-800/40 text-cyan-300 font-mono text-[11px] mb-2 flex items-center justify-between">
-          <span>&gt; Iniciando GraphRAG: Extrayendo entidades y relaciones semánticas...</span>
-          <span class="animate-pulse">ONLINE</span>
-        </div>
-      `;
-
-      // Visual simulation stages in the agent stream
-      const personas = [
-        { name: "Agent_Fan_Bogota", type: "Fan leal", avatar: "emerald", icon: "heart", text: "¡Me encanta! Si Juan Diego lo recomienda, yo voy a comprarlo fijo." },
-        { name: "Agent_BBQ_Purist", type: "Crítico", avatar: "rose", icon: "ban", text: "La carne buena no necesita salsas industriales. Se vendió a la marca, perdió la esencia." },
-        { name: "Agent_Marketing_Dir", type: "Patrocinador", avatar: "amber", icon: "briefcase", text: "El producto se ve claro en los primeros 3 segundos. Excelente integración si no satura." },
-        { name: "Agent_ViralHunter", type: "Comunidad", avatar: "purple", icon: "fire", text: "El hook de los 2 segundos genera conflicto en los comentarios. El algoritmo lo va a disparar." },
-        { name: "Agent_Student_Budget", type: "Consumidor", avatar: "blue", icon: "cart-shopping", text: "¿Dónde se consigue y cuánto cuesta? Si vale más de $20.000 cop paso." },
-        { name: "Agent_Gossip_LatAm", type: "Prensa / TV", avatar: "pink", icon: "newspaper", text: "¿Esa indirecta fue para los jurados de MasterChef? Si es así, esto sale en titulares mañana." }
-      ];
-
-      for (let i = 0; i < 4; i++) {
-        await new Promise(r => setTimeout(r, 600));
-        const p = personas[Math.floor(Math.random() * personas.length)];
-        const row = document.createElement("div");
-        row.className = "p-2.5 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-2.5 animate-fadeIn";
-        row.innerHTML = `
-          <div class="w-6 h-6 rounded-lg bg-${p.avatar}-500/20 text-${p.avatar}-400 flex items-center justify-center text-[10px] shrink-0 border border-${p.avatar}-500/30">
-            <i class="fa-solid fa-${p.icon}"></i>
-          </div>
-          <div class="flex-1">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-white text-[11px]">${p.name} <span class="text-[9px] font-normal text-slate-500">(${p.type})</span></span>
-              <span class="text-[9px] font-mono text-cyan-400">Ronda ${(i % parseInt(rounds)) + 1}</span>
-            </div>
-            <p class="text-slate-300 text-[11px] mt-0.5">${p.text}</p>
-          </div>
-        `;
-        streamBox.appendChild(row);
-        streamBox.scrollTop = streamBox.scrollHeight;
-      }
-
-      // Now run the Gemini prediction synthesis prompt
-      const promptText = `Actúa como el motor de inteligencia de enjambre 'MiroFish' (Multi-Agent Swarm Intelligence for Predictive Social Simulation).
-Se ejecutó una simulación paralela en dos plataformas sociales (entorno TikTok/Reels y entorno foro/X) con ${agentCount} agentes independientes sobre la siguiente hipótesis:
-
-TALENTO DE LA AGENCIA LA CANTERA: ${talent}
-HIPÓTESIS DE CONTENIDO / CAMPAÑA: ${hypothesis}
-RONDAS DE INTERACCIÓN SIMULADAS: ${rounds}
-
-Genera un reporte sintético riguroso y cuantitativo con la siguiente estructura exacta:
-
-1. MÉTRICAS CUANTITATIVAS (Devuelve exactamente en este formato):
-VIRALIDAD: [Número entre 1 y 100]%
-POSITIVO: [Número entre 1 y 100]%
-RIESGO_PR: [Número entre 1 y 100]%
-CONVERSION: [Número entre 1 y 100]%
-
-2. PATRÓN EMERGENTE DETECTADO POR EL ENJAMBRE (Qué dinámica social no prevista surgió entre los agentes al interactuar).
-3. PUNTOS DE POLARIZACIÓN Y HATE (Por qué y qué porcentaje del público se queja).
-4. IMPACTO PARA EL PATROCINADOR / MARCA (Retorno vs daño de percepción).
-5. AJUSTES O RECOMENDACIÓN DE LA AGENCIA LA CANTERA ANTES DE PUBLICAR (Consejos concretos para el influencer).`;
-
-      try {
-        const apiKey = "";
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-
-        const res = await fetch(apiUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] })
-        });
-
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (text) {
-          // Parse metrics
-          const viralMatch = text.match(/VIRALIDAD:\s*(\d+)%/i);
-          const posMatch = text.match(/POSITIVO:\s*(\d+)%/i);
-          const riskMatch = text.match(/RIESGO_PR:\s*(\d+)%/i);
-          const convMatch = text.match(/CONVERSION:\s*(\d+)%/i);
-
-          document.getElementById("gaugeViral").textContent = viralMatch ? `${viralMatch[1]}%` : "84%";
-          document.getElementById("gaugePositive").textContent = posMatch ? `${posMatch[1]}%` : "72%";
-          document.getElementById("gaugeRisk").textContent = riskMatch ? `${riskMatch[1]}%` : "18%";
-          document.getElementById("gaugeConversion").textContent = convMatch ? `${convMatch[1]}%` : "64%";
-
-          reportOutput.innerHTML = `
-            <div class="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 font-mono whitespace-pre-wrap leading-relaxed text-slate-200">
-              ${text}
-            </div>
-          `;
-          reportWrap.classList.remove("hidden");
-          statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
-          statusText.textContent = "Simulación completada con éxito";
-          showToast("¡Predicción MiroFish generada con éxito!", "success");
-        } else {
-          throw new Error("Respuesta vacía");
-        }
-      } catch (err) {
-        // Fallback robust simulation report
-        document.getElementById("gaugeViral").textContent = "86%";
-        document.getElementById("gaugePositive").textContent = "74%";
-        document.getElementById("gaugeRisk").textContent = "15%";
-        document.getElementById("gaugeConversion").textContent = "68%";
-
-        reportOutput.innerHTML = `
-          <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 font-sans">
-            <h4 class="font-bold text-cyan-400 text-sm uppercase">1. Comportamiento Emergente del Enjambre</h4>
-            <p class="text-slate-300">El enjambre reaccionó con alta polarización inicial (primeras 2 rondas) debido a la inserción de marca. Sin embargo, el carisma del talento amortiguó el 75% del sentimiento negativo al llegar a la ronda 4.</p>
-            <h4 class="font-bold text-amber-400 text-sm uppercase">2. Análisis de Riesgo para La Cantera</h4>
-            <p class="text-slate-300">Riesgo PR estimado en 15%. La tasa de retención se proyecta sobre el 42% en TikTok gracias al gancho de controversia inicial.</p>
-            <h4 class="font-bold text-emerald-400 text-sm uppercase">3. Recomendación de Ajuste</h4>
-            <p class="text-slate-300">Hacer una aclaración humorística en el segundo 15 ('Obvio la carne sola es reina, pero esta salsa me salvó un asado express') para desarmar a los críticos.</p>
-          </div>
-        `;
-        reportWrap.classList.remove("hidden");
-        statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
-        statusText.textContent = "Simulación estándar completada";
-        showToast("Reporte predictivo MiroFish generado.", "info");
-      } finally {
-        runBtn.disabled = false;
-        runBtn.innerHTML = `<i class="fa-solid fa-play"></i><span>Desplegar Enjambre & Predecir</span>`;
-      }
-    }
-
-    function copyMiroReport() {
-      const text = document.getElementById("miroReportOutput").innerText;
-      const textarea = document.createElement("textarea");
-      textarea.value = text;
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast("¡Informe MiroFish copiado al portapapeles!", "success");
-      } catch (e) {
-        showToast("No se pudo copiar el texto", "error");
-      }
-      document.body.removeChild(textarea);
-    }
-
-    function showToast(message, type = "info") {
-      const toast = document.getElementById("toastMessage");
-      const icon = document.getElementById("toastIcon");
-      const text = document.getElementById("toastText");
-      if (!toast || !icon || !text) return;
-
-      text.textContent = message;
-      if (type === "success") {
-        icon.className = "fa-solid fa-circle-check text-emerald-400";
-      } else if (type === "error") {
-        icon.className = "fa-solid fa-triangle-exclamation text-rose-400";
-      } else {
-        icon.className = "fa-solid fa-bolt text-brand-400";
-      }
-
-      toast.classList.remove("translate-y-24", "opacity-0");
-      setTimeout(() => {
-        toast.classList.add("translate-y-24", "opacity-0");
-      }, 3500);
-    }
-
-    function initApp() {
-      renderTrends(trendsData);
-      renderVideoGallery();
-      renderTalents();
-      renderCampaigns();
-    }
-
-    // Auto initialization on load
-    window.addEventListener("DOMContentLoaded", () => {
-      // Ready state check
-    });
-  </script>
-</body>
-</html>
+    let campaignsData =
