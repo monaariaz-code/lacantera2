@@ -93,7 +93,7 @@
             <input 
               type="text" 
               id="globalAiSearchInput" 
-              placeholder="Buscar tendencia (ej: tennis, food, padel)..." 
+              placeholder="Buscar tendencia (ej: flores, tenis, asado, moda)..." 
               onkeyup="handleLiveSearch(event)"
               class="w-full bg-slate-900/90 text-sm text-slate-100 pl-10 pr-24 py-2.5 rounded-xl border border-slate-700/80 focus:border-orange-500 focus:outline-none transition shadow-inner"
             />
@@ -148,7 +148,7 @@
         <input 
           type="text" 
           id="globalAiSearchInputMobile" 
-          placeholder="Buscar tendencia (ej: tennis, padel, cocina)..." 
+          placeholder="Buscar tendencia (ej: flores, tenis, cocina)..." 
           onkeyup="handleLiveSearchMobile(event)"
           class="w-full bg-slate-900 text-sm text-slate-100 pl-10 pr-24 py-2.5 rounded-xl border border-slate-700 focus:border-orange-500 focus:outline-none"
         />
@@ -183,8 +183,8 @@
             <button onclick="quickFilterKeyword('padel')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700">
               <i class="fa-solid fa-baseball text-cyan-400 mr-1.5"></i>Sports & Padel
             </button>
-            <button onclick="quickFilterKeyword('masterchef')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700">
-              <i class="fa-solid fa-tv text-purple-400 mr-1.5"></i>Lifestyle & TV
+            <button onclick="quickFilterKeyword('flores')" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 text-xs font-medium text-slate-200 border border-slate-700">
+              <i class="fa-solid fa-spa text-emerald-400 mr-1.5"></i>Botánica & Flores
             </button>
             <button onclick="triggerAiResearch()" class="px-3 py-1.5 rounded-lg bg-orange-500 hover:bg-orange-600 text-xs font-bold text-slate-950 shadow-md shadow-orange-500/20">
               <i class="fa-solid fa-arrows-rotate mr-1.5"></i>Actualizar Todo
@@ -200,7 +200,7 @@
           <button onclick="filterTrends('todos')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-bold bg-orange-500 text-slate-950" data-category="todos">Todos</button>
           <button onclick="filterTrends('Gastronomia')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300" data-category="Gastronomia">Gastronomía</button>
           <button onclick="filterTrends('Deporte')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300" data-category="Deporte">Deportes & Padel</button>
-          <button onclick="filterTrends('Lifestyle')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300" data-category="Lifestyle">Lifestyle</button>
+          <button onclick="filterTrends('Lifestyle')" class="filter-chip px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-800/80 text-slate-300" data-category="Lifestyle">Lifestyle & Deco</button>
         </div>
 
         <div class="flex items-center space-x-3">
@@ -558,6 +558,51 @@
       }
     ];
 
+    // ================= SELECTOR DE IMÁGENES INTELIGENTE Y COHERENTE =================
+    function getContextualThumbnail(query) {
+      const q = query.toLowerCase();
+
+      // Flores / Jardín / Botánica / Naturaleza
+      if (/flor|flores|flower|jardin|planta|botanica|rosa/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=800&auto=format&fit=crop&q=80';
+      }
+      // Tenis / Pádel / Raquetas
+      if (/tenis|tennis|padel|wimbledon|raqueta/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&auto=format&fit=crop&q=80';
+      }
+      // Gastronomía / Comida / Asados / BBQ / Chef
+      if (/food|comida|asado|carne|chef|parrilla|cocina|receta|restaurante|burger/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop&q=80';
+      }
+      // Moda / Belleza / Maquillaje / Estilo
+      if (/moda|fashion|makeup|maquillaje|beauty|skincare|vestido/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&auto=format&fit=crop&q=80';
+      }
+      // Fitness / Gym / Entrenamiento
+      if (/fitness|gym|entrenamiento|running|crossfit|ejercicio/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80';
+      }
+      // Café / Barista / Bebidas
+      if (/cafe|coffee|coctel|barista|vino|cerveza/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&auto=format&fit=crop&q=80';
+      }
+      // Viajes / Hoteles / Destinos
+      if (/viaje|travel|hotel|playa|turismo|avion/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80';
+      }
+      // Tecnología / IA / Gadgets
+      if (/tech|ia|ai|gadget|software|apple|robot/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=80';
+      }
+      // Hogar / Diseño de Interiores / Decoración
+      if (/deco|hogar|casa|interior|diseno|mueble/i.test(q)) {
+        return 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&auto=format&fit=crop&q=80';
+      }
+
+      // Por defecto para términos libres: imagen editorial fresca de creación de contenido
+      return 'https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=800&auto=format&fit=crop&q=80';
+    }
+
     // ================= NAVEGACIÓN =================
     function switchMainTab(tabKey) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -624,24 +669,22 @@
       grid.innerHTML = `
         <div class="col-span-full py-16 text-center text-slate-400">
           <i class="fa-solid fa-circle-notch fa-spin text-4xl text-orange-500 mb-3"></i>
-          <p class="font-medium text-white text-base">Conectando feeds de video para: <span class="text-orange-400">"${query}"</span>...</p>
+          <p class="font-medium text-white text-base">Buscando tendencias y videos sobre: <span class="text-orange-400">"${query}"</span>...</p>
         </div>
       `;
 
       setTimeout(() => {
         const queryEncoded = encodeURIComponent(query);
-        const isFood = /food|comida|receta|chef|asado|carne|cocina/i.test(query);
-        const isSport = /tennis|tenis|padel|deporte|fitness|gym|farah|raqueta/i.test(query);
+        const qLower = query.toLowerCase();
+        
+        const isFood = /food|comida|receta|chef|asado|carne|cocina|cafe|restaurante/i.test(qLower);
+        const isSport = /tennis|tenis|padel|deporte|fitness|gym|farah|raqueta|running/i.test(qLower);
         
         const category = isFood ? 'Gastronomia' : (isSport ? 'Deporte' : 'Lifestyle');
         const talent = isFood ? 'Juan Diego Vanegas' : (isSport ? 'Robert Farah' : 'Julieta Piñeres');
         
-        // Imagen contextual
-        const thumb = isSport 
-          ? 'https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&auto=format&fit=crop&q=80'
-          : (isFood 
-              ? 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80'
-              : 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&auto=format&fit=crop&q=80');
+        // Obtiene la foto exacta según la palabra buscada
+        const thumb = getContextualThumbnail(query);
 
         // Enlaces directos a feeds reales de las plataformas
         const tiktokSearchUrl = `https://www.tiktok.com/tag/${queryEncoded}`;
@@ -696,7 +739,7 @@
         trendsData = [...liveResults, ...trendsData];
         renderTrends(liveResults);
         renderViralVideos(liveResults);
-        showToast(`Conectado a TikTok, Instagram y Shorts para "${query}"`, 'success');
+        showToast(`Tendencias actualizadas con fotos y videos de "${query}"`, 'success');
       }, 350);
     }
 
@@ -730,8 +773,8 @@
 
         return `
           <div class="bg-slate-900/90 border border-slate-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between">
-            <div class="relative h-44 w-full bg-slate-950">
-              <img src="${trend.thumbnail}" alt="${trend.title}" class="w-full h-full object-cover opacity-85">
+            <div class="relative h-44 w-full bg-slate-950 overflow-hidden">
+              <img src="${trend.thumbnail}" alt="${trend.title}" class="w-full h-full object-cover opacity-90 transition duration-500 hover:scale-105">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
               
               <div class="absolute top-3 left-3 flex items-center space-x-1.5">
@@ -1055,7 +1098,7 @@
         insights: 'Guardado manualmente por La Cantera.',
         hook3s: 'Revisión de formato prioritario.',
         videoUrl: url,
-        thumbnail: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80'
+        thumbnail: getContextualThumbnail(title)
       };
 
       trendsData.unshift(newEntry);
@@ -1126,7 +1169,7 @@
       }, 2500);
     }
 
-    // ================= INICIALIZACIÓN DIRECTA =================
+    // ================= INICIALIZACIÓN =================
     window.addEventListener('DOMContentLoaded', () => {
       renderTrends(trendsData);
       renderViralVideos(trendsData);
